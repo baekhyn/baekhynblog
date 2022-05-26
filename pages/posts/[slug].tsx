@@ -6,12 +6,27 @@ import Container from '../../components/Container'
 import { MdxContainer } from '../../components/MdxContainer'
 import MdxTitle from '../../components/MdxTitle'
 import { MDXType } from '../../types/type'
+import { NextSeo } from 'next-seo'
+import metadata from '../../data/metadata'
 
 export default function Post({ postData }: { postData: MDXType }) {
     const { code, frontmatter } = postData
     const Component = React.useMemo(() => getMDXComponent(code), [code])
     return (
         <Container>
+            <NextSeo
+                title={frontmatter.title}
+                description={frontmatter.subtitle}
+                canonical={`${metadata.cononical}/posts/${frontmatter.slug}`}
+                openGraph={{
+                    url: `${metadata.openGraph.url}/posts/${frontmatter.slug}`,
+                    type: 'article',
+                    article: {
+                        publishedTime: `${frontmatter.date}`,
+                        tags: [`${frontmatter.category}`],
+                    },
+                }}
+            />
             <MdxTitle
                 title={frontmatter.title}
                 subtitle={frontmatter.subtitle}
