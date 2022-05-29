@@ -1,0 +1,156 @@
+---
+title: '리엑트 강의 정리 1'
+subtitle: 'React props, jsx'
+date: '2022-05-29'
+category: 'React'
+---
+
+# React에 대하여
+
+**리엑트**는 **자바스트립트의 라이브러리**이다.  
+**자바스크립트의 역할:** **dom**이라는 **html요소**를 조작가능하게 해줌 **(새 html을 받아올 필요가 없다)**
+
+자바스크립트 = **명령적 접근방식**
+
+일련의 액션들을 **단계적으로 설명**한다.
+
+**리엑트(SPA)** = **다채롭고 복잡한 인터페이스**를 **쉽게 구축**해준다.  
+**선언형 방식, 선언형 컴포넌트**
+
+싱글 페이지 어플리케이션>>화면에 표시되는 내용을 이어받아서 제어
+또 **다른 html 페이지**를 **요청하지 않음**  
+**더 나은 ui**와 **사용자 경험**
+
+**사용자인터페이스(Component User interfaces)**  
+모든 **유저 인터페이스**는 **컴포넌트**로 구성됨
+
+-   **재사용성**: 반복을 줄임
+-   **우려사항 분리**: 코드를 작고 관리 가능한 단위로 유지(함수)
+
+## 리엑트 작동방식
+
+컴포넌트 => 자체 Html 요소 html 코드를 반환  
+컴포넌트가 (App.js)리엑트 돔 렌더의 지시로 html페이지에 직접 렌더링 됨
+
+## 셋팅
+
+```js
+npx create-react-app 파일명
+```
+
+개발서버 구동
+
+```js
+npm start
+```
+
+서버 구동 취소 **cmd+c**
+
+다른 곳에서 다운 받은 경우
+
+```js
+npm install
+```
+
+`package.json` **파일을 보고** 폴더에 필요한 모든 것들을 **다운로드** 해줌
+
+# CSS 스타일링
+
+-   전체적인 스타일링: **global.css**
+-   컴포넌트별로 스탕일링: ExpenseItem.css 파일 추가
+    ExpenseItem.js에 임포트 해줌 => 리엑트에게 css 파일을 읽어야함을 알려줌
+
+# 디렉토리 경로
+
+`src` 하위 `components` 디렉토리 생성 (이곳에 컴포넌트 작성)  
+컴포넌트도 필요에 따라 나눠서 관리할 수 있음.  
+컴포넌트 파일명 관례: 한단어로 작성한다. 카멜케이스로 작성한다.
+(강의에서는 components > ui, expenses로 분류함)
+
+# props
+
+`props`: **객체**를 받아 **데이터 접근**을 가능하게 해줌
+
+## children props
+
+`props.children`의 **children**은 **react의 예약어**임. **래퍼 컴포넌트**, **컨테이너 컴포넌트**를 생성할때 사용.
+
+**태그 사이**의 **컨텐츠**를 **Props로 전달**.
+
+```jsx:Card.js
+const Card = (props) => {
+  const classes = "card " + props.className;
+  return <div className={classes}>{props.children}</div>;
+};
+```
+
+**열고 닫는 태그 사이에 컨텐츠들을 불러올때 사용.**
+
+코드 2번
+
+-   일반 컴포넌트: className을 정하여 css 스타일링을 지정하는게 지원이 됨
+-   사용자 정의 컴포넌트: 사용자가 지원하라고 지시한 것들만 지원함.
+
+일부 **중복되는 css코드 jsx코드를 추출**할 수 있다는게 장점이다.
+
+# JSX 소개
+
+JSX란 자바스크립트의 XML(Html)이다.  
+작성하면 자동으로 브라우저에서 실행.
+
+JSX의 특징
+
+-   브라우저에서 잘 실행됨
+-   개발자 입장에서 작성 하기 쉽다
+
+## JSX 작성
+
+**반환하는 문장마다** 혹은 **JSX 코드 한 조각 마다** 반드시 **하나의 루트 요소**를 가짐
+
+리엑트에서 `()`의 의미: 이것은 한 문장이다.
+
+리엑트에서의 `{}`의 의미: js 코드 작성
+
+## React.createElement ( )
+
+`package.json` 파일을 확인해보면 **react**, **react-dom**이라는 패키지를 확인할 수 있음.  
+**react-dom**은 app.js에서 임포트 된 걸 확인 할 수 있지만 **react**는 보이지 않는다.
+**react**는 **jsx 작성을 가능**하게 해준다.
+
+-   일반적인 방식의 JSX 작성
+
+```jsx:jsx
+return(
+    <div>
+	<h2>Let's get started!</h2>
+  	<Expenses items={expenses}/>
+    </div>
+)
+```
+
+-   React를 임포트 하여 메소드 사용
+
+```jsx:react.createElement
+return React.createElement(
+  	'div',
+  	{},
+	React.createElement('h2',{},"Let's get started!"),
+  	React.createElement(Expenses, {items:expenses}),
+);
+```
+
+**react**는 보이지 않지만 화면 뒤에서 이러한 방식으로 작동한다.
+
+> **React.createElement**는 **3가지의 인자**를 받는다.
+>
+> 1. **생성해야할 요소 이름**
+> 2. **요소의 속성을 결정하는 객체** ( 요소가 속성을 갖지 않는 경우 `{}` )
+> 3. **태그 사이에 있는 컨텐츠**
+
+📌 이러한 **작동 방식** 때문에 **jsx**를 작성할때 **반드시 하나의 루트 요소**를 가져야하는 것이다.
+
+# 합성
+
+**합성(composition)**
+
+Expense에서 ExpenseItem사용, ExpenseItem에서 ExpenseDate 사용=>이를 **합성**이라고 지칭함 **(컴포넌트 결합)**
