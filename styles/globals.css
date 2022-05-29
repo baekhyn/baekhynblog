@@ -72,8 +72,6 @@ code[class*='language-'] {
 }
 
 pre[class*='language-'] {
-    border-bottom-right-radius: 12px;
-    border-bottom-left-radius: 12px;
     border: solid 1px var(--light-gray);
     background: var(--sub-gray);
     overflow: auto;
