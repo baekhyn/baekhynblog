@@ -1,0 +1,116 @@
+---
+title: '타입스크립트 js es6 문법'
+subtitle: 'Typescript'
+date: '2022-06-06'
+category: 'Typescript'
+---
+
+# let vs var
+
+유효 범위에서 차이가 남
+
+```ts
+//1.
+var result
+function add(a: number, b: number) {
+    // var result
+    result = a + b
+    return result
+}
+
+console.log(result)
+//error
+//정상출력
+
+//2.
+if (age > 20) {
+    var isOld = true
+    //let 사용 시 에러 발생
+}
+
+console.log(isOld)
+//true
+```
+
+var
+
+-   전역 유효 범위
+-   함수 유효 범위 (함수 내에서 정의된 변수는 함수 내에서만 유효)
+
+# 화살표 함수
+
+타입 작성 시 화살표 함수 작성 방법
+
+-   방법 1
+
+```ts
+const printOutput = (output: string | number) => console.log(output)
+```
+
+-   방법 2
+
+```ts
+const printOutput: (a: number | string) => void = (output) => console.log(output)
+```
+
+```ts
+const button = document.querySelector('button')
+
+if (button) {
+    button.addEventListener('click', (event) => console.log(event))
+}
+```
+
+-   if문을 사용하면 button을 null 값으로 추론하지 않는다.
+-   addEventListener의 기능을 알기 때문에 event 객체 추론 가능
+
+# 매개변수 기본값 설정
+
+```ts
+const add = (a: number, b: number = 1) => a + b
+
+console.log(add(5))
+//6
+```
+
+매개변수 기본값을 설정하면 위와 같이 인자를 하나만 받아도 정상출력된다.
+
+```ts
+const add = (a: number = 1, b: number) => a + b
+
+console.log(add(5))
+//error
+```
+
+인수를 건너띄고 다음 인자에 값을 입력하지 않기 때문에 에러발생  
+따라서 매개변수의 기본값을 설정할 때는 오른쪽에 설정해줘야 한다.
+
+# 레스트 연산자
+
+```ts
+const add = (...number: number[]) => {
+    return numbers.reduce((curResult, curValue) => {
+        return curResult + curValue
+    }, 0)
+}
+const addedNumbers = add(5, 10, 2, 3.7)
+```
+
+위 코드에서 지원할 인수의 수를 알고 있는 경우 튜플 사용도 가능하다.
+
+```ts
+const add = (...number: [number, number, number]) => {
+    return numbers.reduce((curResult, curValue) => {
+        return curResult + curValue
+    }, 0)
+}
+const addedNumbers = add(5, 10, 2)
+```
+
+# 배열 구조분해 할당
+
+```ts
+const [hobby1, hobby2, ...remainingHobbies] = hobby
+```
+
+-   hobby1, hobby2외에 입력된 나머지 배열요소들은 remainingHobbies에 배열병합된다.
