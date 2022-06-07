@@ -1,0 +1,211 @@
+---
+title: '조건부 내용 출력'
+subtitle: '리엑트 조건부 내용 출력하기, tsx'
+date: '2022-06-08'
+category: 'React'
+---
+
+# 조건부 출력
+
+    블로그에 **조건부 출력 내용**을 추가했다.
+
+    - **Before**
+
+    `index.tsx`
+
+    ```tsx
+
+export const Home = ({ allData }: { allData: Array<PostType> }) => {
+    
+    return (
+        <Container>
+            <Title name={'Latest Posts'} />
+            {allData.map((allData) => (
+                <Post
+                    title={allData.title}
+                    subtitle={allData.subtitle}
+                    date={allData.date}
+                    category={allData.category}
+                    slug={allData.slug}
+                    key={allData.title}
+                />
+            ))}
+        </Container>
+    )
+}
+    ```
+`Post.tsx`
+
+```tsx
+export const Post = ({ title, subtitle, date, category, slug }: PostType) => {
+    return (
+        <PostStyle>
+            {data.map((data) => (
+                <li key={data.subtitle}>
+                    <Link href={`/posts/${data.slug}`}>
+                        <a>
+                            <h1>{data.title}</h1>
+                            <h2>{data.subtitle}</h2>
+                            <span>{data.category}</span>
+                            <div>
+                                <Date dateString={data.date} />
+                            </div>
+                        </a>
+                    </Link>
+                </li>
+            ))}
+        </PostStyle>
+    )
+}
+```
+
+-   **After**
+
+`index.tsx`
+
+```tsx
+export const Home = ({ allData }: { allData: Array<PostType> }) => {
+    console.log(allData)
+    return (
+        <Container>
+            <Title name={'Latest Posts'} />
+            <Post data={allData} />
+        </Container>
+    )
+}
+```
+
+`Post.tsx`
+
+```tsx
+export const Post = ({ data }: { data: Array<PostType> }) => {
+    if (data.length === 0) {
+        return <NoPost>No Posts Yet.</NoPost>
+    }
+    //포스트 데이터가 없을 시 No posts yet
+
+    return (
+        <PostStyle>
+            {data.map((data) => (
+                <li key={data.subtitle}>
+                    <Link href={`/posts/${data.slug}`}>
+                        <a>
+                            <h1>{data.title}</h1>
+                            <h2>{data.subtitle}</h2>
+                            <span>{data.category}</span>
+                            <div>
+                                <Date dateString={data.date} />
+                            </div>
+                        </a>
+                    </Link>
+                </li>
+            ))}
+        </PostStyle>
+    )
+}
+```
+
+-   변경사항 1: **매핑**을 `index.tsx`가 아닌 `Post.tsx`에 수납하였음  
+    ✨인덱스 페이지 코드가 깔끔해 졌다.  
+    ✨페이지 코드가 아닌 post를 생성하는 컴포넌트에서 매핑을 하는 것이 더 적합하다고 느꼈음.
+
+-   변경사항 2: `Post.tsx`의 props를 배열로 받아옴  
+    ✨구조분해로 받아오는 것보다 배열로 받아오는 것이 더 깔끔한 거 같다.
+-   변경사항 3: `Post.tsx`에 조건부 추가  
+    ✨데이터가 없을 시에 노출되는 문구를 추가 했다.
+
+위에서는 if문을 사용하여 간단하게 작성하였는데, 조건부 출력 방법에는 이밖에도 여러가지가 있다.
+
+## 방법 1
+
+변수에 할당하지 않고 jsx에 조건부 넣기 `조건 ? T:F`
+
+```tsx
+export const Post = ({ data }: { data: Array<PostType> }) => {
+    return (
+        { data.length === 0 ? (<NoPost>No Posts Yet.</NoPost>) : (
+        <PostStyle>
+            {data.map((data) => (
+                <li key={data.subtitle}>
+                    <Link href={`/posts/${data.slug}`}>
+                        <a>
+                            <h1>{data.title}</h1>
+                            <h2>{data.subtitle}</h2>
+                            <span>{data.category}</span>
+                            <div>
+                                <Date dateString={data.date} />
+                            </div>
+                        </a>
+                    </Link>
+                </li>
+            ))}
+        </PostStyle>)
+    })
+}
+```
+
+## 방법 2
+
+`&& 연산자 사용`
+조건 충족시 다음 구문으로 넘어가게 된다.
+
+```tsx
+export const Post = ({ data }: { data: Array<PostType> }) => {
+    return (
+        { data.length === 0 && <NoPost>No Posts Yet.</NoPost>}
+        { data.length > 0 &&
+            <PostStyle>
+                {data.map((data) => (
+                    <li key={data.subtitle}>
+                        <Link href={`/posts/${data.slug}`}>
+                            <a>
+                                <h1>{data.title}</h1>
+                                <h2>{data.subtitle}</h2>
+                                <span>{data.category}</span>
+                                <div>
+                                    <Date dateString={data.date} />
+                                </div>
+                            </a>
+                        </Link>
+                    </li>
+                ))}
+            </PostStyle> }
+    })
+}
+```
+
+## 방법 3
+
+`let 과 if문 사용`
+
+```tsx
+export const Post = ({ data }: { data: Array<PostType> }) => {
+    let content = <NoPost>No Posts Yet.</NoPost>
+    //Jsx는 변수에 할당이 가능하다.
+
+    if (data.length > 0) {
+        content = <PostStyle>
+            data.map((data) => {
+                <li key={data.subtitle}>
+                    <Link href={`/posts/${data.slug}`}>
+                        <a>
+                            <h1>{data.title}</h1>
+                            <h2>{data.subtitle}</h2>
+                            <span>{data.category}</span>
+                            <div>
+                                <Date dateString={data.date} />
+                            </div>
+                        </a>
+                    </Link>
+                </li>
+            })
+        </PostStyle>
+    }
+    //조건 충족시 변수에 할당
+
+    return{content}
+    //jsx 리턴
+}
+```
+
+코드를 오타 없이 작성하였는지 잘 모르겠다. 정답은 없으니 그때마다 골라서 작성하면 된다.
