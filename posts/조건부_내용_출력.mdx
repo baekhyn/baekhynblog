@@ -40,20 +40,18 @@ export const Home = ({ allData }: { allData: Array<PostType> }) => {
 export const Post = ({ title, subtitle, date, category, slug }: PostType) => {
     return (
         <PostStyle>
-            {data.map((data) => (
-                <li key={data.subtitle}>
-                    <Link href={`/posts/${data.slug}`}>
-                        <a>
-                            <h1>{data.title}</h1>
-                            <h2>{data.subtitle}</h2>
-                            <span>{data.category}</span>
-                            <div>
-                                <Date dateString={data.date} />
-                            </div>
-                        </a>
-                    </Link>
-                </li>
-            ))}
+            <li>
+                <Link href={`/posts/${slug}`}>
+                    <a>
+                        <h1>{title}</h1>
+                        <h2>{subtitle}</h2>
+                        <span>{category}</span>
+                        <div>
+                            <Date dateString={date} />
+                        </div>
+                    </a>
+                </Link>
+            </li>
         </PostStyle>
     )
 }
