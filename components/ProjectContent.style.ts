@@ -1,5 +1,9 @@
 import styled from '@emotion/styled'
 
+export const NoProject = styled.h2`
+    text-align: center;
+`
+
 export const ProjectContainer = styled.div`
     display: flex;
     justify-content: space-around;

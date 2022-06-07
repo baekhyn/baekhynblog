@@ -78,3 +78,6 @@ export const PostStyle = styled.ul`
         color: var(--light-gray);
     }
 `
+export const NoPost = styled.h2`
+    text-align: center;
+`

@@ -6,19 +6,11 @@ import { Post } from '../components/Post'
 import { PostType } from '../types/type'
 
 export const Home = ({ allData }: { allData: Array<PostType> }) => {
+    console.log(allData)
     return (
         <Container>
             <Title name={'Latest Posts'} />
-            {allData.map((allData) => (
-                <Post
-                    title={allData.title}
-                    subtitle={allData.subtitle}
-                    date={allData.date}
-                    category={allData.category}
-                    slug={allData.slug}
-                    key={allData.title}
-                />
-            ))}
+            <Post data={allData} />
         </Container>
     )
 }

@@ -17,16 +17,7 @@ export default function Posts({ allData }: { allData: Array<PostType> }) {
                 openGraph={{ url: `${metadata.openGraph.url}/posts` }}
             />
             <Title name={'Posts'} />
-            {allData.map((allData) => (
-                <Post
-                    title={allData.title}
-                    subtitle={allData.subtitle}
-                    date={allData.date}
-                    category={allData.category}
-                    slug={allData.slug}
-                    key={allData.title}
-                />
-            ))}
+            <Post data={allData} />
         </Container>
     )
 }
