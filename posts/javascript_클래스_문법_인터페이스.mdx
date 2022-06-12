@@ -1,0 +1,546 @@
+---
+title: 'javascript 클래스 문법, 인터페이스 (+with TS)'
+subtitle: 'class, javascript, ES6, interface'
+date: '2022-06-12'
+category: 'Typescript'
+---
+
+# OOP
+
+OOP = object-oriented programming
+객체 지향 프로그래밍
+
+> ⚠️
+>
+> -   ✔️ 자바 : **클래스** 기반 객체 지향 언어(**class**를 **사전에** 정의, **new 연산자**로 **인스턴스**를 생성)
+> -   ✔️ 자바스크립트 : **프로토타입** 기반 객체 지향 언어 (📌 **클래스 개념**이 없었음 **constructor**도 마찬가지. **ES6문법**에서 등장했다)
+
+class 등장 이전에는 클로저, 프로토타입, 생성자함수를 사용했다.
+
+# 클래스 문법
+
+(+타입지정) 생성할 키 이름과 값의 타입을 지정
+
+```ts
+class Department {
+    name: string;
+    //키 이름 타입 지정
+
+    constructor(n: string) {
+        this.name = name;
+    }
+    //키 값의 타입 지정
+}
+
+const accounting = new Department('Accounting');
+// { name : Accounting }
+```
+
+## 트랜스컴파일
+
+상기 코드의 트랜스컴파일
+
+### **ES6**
+
+```js
+'use strict';
+class Department {
+    constructor(n) {
+        this.name = n;
+    }
+}
+const accounting = new Department('Accounting');
+console.log(accounting);
+```
+
+    -  `name:string;` 을 지원하지 않음
+
+### **ES5**
+
+```ts
+var Department = (function () {
+    function Department(n) {
+        this.name = n;
+    }
+    return Department;
+})();
+var accounting = new Department('Accounting');
+```
+
+-   생성자 함수
+-   `(function....)()` 선언과 동시에 할당 **즉시 실행 함수**
+
+> 📌 자바스크립트에서는 **일반 함수**를 **선언**하고 **new 키워드**와 함께 **호출**하면 **생성자 함수**처럼 작동한다.
+
+## 메소드
+
+```ts
+class Department {
+    name: string;
+
+    constructor(n: string) {
+        this.name = name;
+    }
+
+    describe() {
+        console.log('Department' + this.name);
+    }
+}
+
+//1. new 키워드로 인스턴스 생성
+const accounting = new Department('Accounting');
+
+accounting.describe();
+
+//2. 객체 리터럴 사용
+const accountingCopy = { describe: accounting.describe };
+
+accountingCopy.describe();
+// undifined
+```
+
+-   **객체 리터럴** 사용시 발생하는 일 (undifined가 나온 이유)
+
+    -   **new** 키워드와 **Object()함수**를 사용한 것과 동일하게 동작한다.
+
+    ```ts
+    var accountingCopy = new Object();
+    ```
+
+    따라서 Department가 아닌 내장 함수인 Object 생성자 함수를 사용한 것이나 다름 없음.  
+    마치 accounting.describe( )를 실행 한 것처럼 동작한다.  
+    Department의 인스턴스인 accounting에서 호출한게 아님
+
+다음과 같이 this 매개 변수와 accountingCopy의 name 프로퍼티를 추가해주면 해결됨
+
+```ts
+class Department {
+    name: string;
+
+    constructor(n: string) {
+        this.name = name
+    }
+
+    describe(this: Department) {
+        console.log('DUMMY' + this.name)
+    }
+}
+
+const accounting = new Department('Accounting')
+
+accounting.describe()
+//Department:Accounting
+
+const accountingCopy = { name:'DUMMY', describe: accounting.describe }
+
+accountingCopy.describe()
+//Department:DUMMY
+정상 출력
+```
+
+### 프로토타입
+
+accounting.describe( )가 가능한 이유.
+
+```ts
+'use strict';
+var Department = (function () {
+    function Department(n) {
+        this.name = n;
+    }
+    Department.prototype.describe = function () {
+        console.log('Department' + this.name);
+    };
+    return Department;
+})();
+var accounting = new Department('Accounting');
+accounting.describe();
+```
+
+Department.prototype.describe( )나 다름 없다.
+
+> ❗️ 먼저 알아야 할 점
+>
+> -   자바스크립트에서 원시 타입을 제외한 거의 모든 것들은 객체이다. (배열, 함수, 정규표현식 등등)
+
+-   ✨ 자바스크립트에서 **모든 객체**들은 **[[prototype]]** 인터널 슬롯을 가진다
+-   ✨ **함수 객체**는 **[[prototype]]** 인터널 슬롯과 **prototype 속성**을 가진다.
+
+### [[prototype]] vs prototype 프로퍼티
+
+**[[prototype]] :** 프로토타입의 값은 `__proto__`로 접근이 가능, `부모.prototype`을 가리킴  
+**prototype 프로퍼티 :** 함수 객체가 **생성자**로 작동할 때 **자식 객체**를 가리킴
+
+위의 경우 이렇게 표현
+
+```ts
+console.log(Department.__proto__ === Function.prototype);
+//true
+
+console.log(Department.prototype === accounting.__proto__);
+//true
+
+console.log(Department === accounting.constructor);
+//true
+```
+
+자세한 내용: **https://poiemaweb.com/js-prototype**
+
+> prototype chain (accounting.describe 실행할 때 발생하는 일 )
+>
+> -   자식이 직접 자료를 가지고 있는 경우 자식에 접근해서 동작
+> -   없다면 부모의 prototype을 확인
+> -   없다면 부모의 부모의 prototype 확인
+
+# 한정자
+
+클래스 필드를 외부에서 접근가능, 할당 가능한 경우가 있음  
+클래스를 사용하는 방법은 무조건 한 가지 방식으로 통일하도록 통제하는 것이 좋다.
+
+이 때 사용하는 것이 접근 제어자(한정자)
+
+```js
+class Department {
+    name: string;
+    // ⁇ private employee:string[] = [];
+
+    employees: string[] = [];
+    // public
+
+    constructor(n: string) {
+        this.name = n;
+    }
+
+    describe(this: Department) {
+        console.log('Department' + this.name);
+    }
+
+    addEmployee(employee: string) {
+        //validation etc
+        this.employees.push(employee);
+    }
+
+    printEmployeeInformation() {
+        console.log(this.employees.length);
+        console.log(this.employees);
+    }
+}
+
+const accounting = new Department('Accounting');
+
+accounting.addEmployee('Max');
+accounting.addEmployee('Manu');
+// 접근 가능
+
+accounting.employees[2] = 'Anna';
+// ⁇ 접근 불가능
+```
+
+> 📌
+>
+> -   자바스크립트에는 이기능을 지원하지 않기 때문에 런타임 도중에 에러가 발생하지 않을 수 있음
+> -   public의 경우에는 한정자를 사용하지 않으며 private는 # 사용
+> -   타입스크립트는 지원하기 때문에 에러를 알려준다(코드 에러없이 런타임은 가능)
+
+# public
+
+-   기본값
+-   엑세스 허용
+
+# protected
+
+-   클래스 내부에서 엑세스 가능
+-   외부 사용 불가
+
+# protected
+
+-   클래스 내부 **확장 클래스**에서 엑세스 가능
+-   외부 사용 불가
+
+# 약식 초기화
+
+축약 예시
+
+```ts
+class Department {
+    //   private id: string;
+    //   private name: string;
+    private employees: string[] = [];
+
+    constructor(private id: string, public name: string) {
+        // this.id = id;
+        // this.name = n;
+    }
+    //❗️ 가져올 필드명을 적어줌
+
+    describe(this: Department) {
+        // console.log('Department' + this.name);
+        console.log(`Department(${this.id}:${this.name})`);
+    }
+
+    addEmployee(employee: string) {
+        //validation etc
+        this.employees.push(employee);
+    }
+
+    printEmployeeInformation() {
+        console.log(this.employees.length);
+        console.log(this.employees);
+    }
+}
+```
+
+## readonly
+
+초기화 후 변경 불가능
+
+```ts
+class Department {
+    private employees: string[] = [];
+
+    constructor(private readonly id: string, public name: string) {
+        // this.id = id;
+        // this.name = n;
+    }
+
+    describe(this: Department) {
+        console.log(`Department(${this.id}:${this.name})`);
+    }
+
+    addEmployee(employee: string) {
+        this.employees.push(employee);
+        this.id = 'e1'; // error
+    }
+
+    printEmployeeInformation() {
+        console.log(this.employees.length);
+        console.log(this.employees);
+    }
+}
+```
+
+# 클래스 상속
+
+`extends`를 사용하여 다른 클래스에 상속할 수 있다.  
+이때 상속 받는 클래스는 생성자 함수를 포함한 부모 클래스의 모든 것들을 가져오게 되며  
+필드와 메소드를 마음대로 추가하여 사용 가능하다.
+
+-   필드
+
+```ts
+class Department {
+    constructor(private readonly id: string, public name: string) {}
+}
+
+class ITDepartment extends Department {
+    constructor(id: string, admins: string[]) {
+        super(id, 'IT');
+        //기본 클래스 생성자 호출, 상속시 반드시 사용
+        //상위 클래스에 전달
+    }
+}
+```
+
+상속 시 주의 할 점 super( )을 사용하여 반드시 부모 함수 생성자에서 요구하는 인자를 사용해야 한다.  
+admins라는 프로퍼티가 추가 되었다.
+
+-   메소드
+
+```ts
+class AccountingDepratment extends Department {
+    constructor(id: string, private reports: string[]) {
+        super(id, 'Accounting');
+    }
+
+    addReport(text: string) {
+        this.reports.push(text);
+    }
+
+    printReports() {
+        console.log(this.reports);
+    }
+}
+```
+
+# getter,setter
+
+**private**으로 설정한 **필드**에 **접근, 호출**을 가능하게 함  
+**캡슐화**에 사용
+
+-   **getter** - 본 필드값을 숨기고 정정한 값을 보여준다. **(필드에 값을 할당 시)**
+-   **setter** - 사용자의 값을 의도대로 정정 **(필드에 접근 시)**
+
+```ts
+class AccountingDepratment extends Department {
+  private lastReport: string;
+
+  constructor(id: string, private reports: string[]) {
+    super(id, 'Accounting');
+    this.lastReport = reports[0];
+  }
+
+  get mostRecentReport() {
+    if (this.lastReport) {
+      return this.lastReport;
+    }
+    throw new Error('No report found');
+  }
+
+  set mostRecentReport(value: string) {
+    if (!value) {
+      throw new Error('Please pass in a vaild value ');
+    }
+    this.addReport(value);
+  }
+
+//getter
+console.log(accounting.mostRecentReport);
+
+//setter
+accounting.mostRecentReport = '';
+
+```
+
+# static
+
+**static**을 붙이면 **정적 메소드, 속성**을 만들 수 있다.
+
+**new 키워드** 사용으로 **인스턴스화** 하지 않고도 **접근이 가능**하다는게 장점
+
+```ts
+class Department {
+    //정적 속성
+    static fiscalYear = 2020;
+
+    constructor(private readonly id: string, public name: string) {}
+
+    //정적 메소드
+    static createEmployee(name: string) {
+        return { name: name };
+    }
+}
+
+const employee1 = Department.createEmployee('Max');
+// { name : 'Max' }
+
+console.log(Department.fiscalYear);
+// 2020
+```
+
+-   정적 메소드, 속성은 정적이 아닌 **클래스 내부**에서 **접근이 불가하다.**
+    (클래스 내부에서 사용하면 인스턴스화 되기 때문에...)
+
+# 추상 클래스
+
+`abstract`를 사용하여 추상클래스를 만들 수 있음  
+**클래스**와 **메소드**에 붙여준다
+
+```ts
+abstract class Department {
+    ...
+    abstract describe(this: Department): void
+}
+```
+
+# 싱글톤 패턴
+
+-   클래스 기반 하나의 인스턴스만을 만들고
+-   외부 접근을 허용하는 static을 제한하고자하는 경우 유용
+    클래스 내부에만 정적 접근 허용, 내부에서만 정의하고 꺼내보는 느낌
+
+```ts
+class AccountingDepartment extends Department {
+    private static instance: AccountingDepartment;
+    //내부 접근 허용
+
+    private constructor(id: string, private reports: string[]) {...}
+    //생성자에 private를 붙여 new 사용 막음
+
+    static getInstance() {
+        if (AccountingDepartment.instance) {
+            return this.instance;
+        }
+        this.instance = new AccountingDepartment('d2', []);
+        return this.instance;
+    }
+
+  ...
+
+}
+
+const accounting1 = AccountingDepartment.getInstance();
+const accounting1 = AccountingDepartment.getInstance();
+//여러번 호출하여도 똑같은 하나의 인스턴스
+```
+
+# interface
+
+interface: 객체(또는 함수)를 정의
+추상 클래스처럼 생성하는 속성과 메소드의 이름, 타입 규정
+
+인터페이스는 사용자 지정 타입보다 명확하며 extends implements 등 보다 다양하게 이용 가능
+
+> 인터페이스는 유니언 타입과 같은 임의 타입을 저장하지 않는다.
+
+class에 인터페이스 적용
+
+```ts
+interface Greetable {
+    name: string;
+
+    greet(phrase: string): void;
+}
+
+class Person implements Greetable {...}
+
+// instance
+let user1: Greetable;
+
+user1 = new Person('Max');
+
+```
+
+## 인터페이스 readonly
+
+readonly를 설정하면 class에 readonly를 사용하지 않아도 자동으로 추론
+
+## 인터페이스 연장
+
+extends 사용
+
+```ts
+interface Named {
+    readonly name: string;
+}
+
+interface Greetable extends Named {
+    greet(phrase: string): void;
+}
+```
+
+## 함수 사용
+
+익명함수 정의 시 메소드가 아닌 함수의 타입을 지정할 수 있다.
+
+```ts
+interface AddFn {
+    (a: number, b: number): number;
+}
+
+let add: AddFn;
+
+add = (n1: number, n2: number) => {
+    return n1 + n2;
+};
+```
+
+## 클래스 인터페이스 비교
+
+인터페이스는 인스턴스화 되지 않으며 컴파일 되지 않는다.  
+클래스는 인스턴스화 될 수 있으며 컴파일 된다.
+
+# ref
+
+---
+
+**https://poiemaweb.com/**
