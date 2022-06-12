@@ -4,7 +4,7 @@ export const MdxStyle = styled.div`
     min-height: 1000px;
     padding: 0.1rem;
     margin: 1em 2em;
-    line-height: 1.8;
+    line-height: 34px;
     font-size: 1rem;
 
     h1,h2,h3,h4{
