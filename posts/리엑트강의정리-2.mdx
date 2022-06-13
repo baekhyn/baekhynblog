@@ -1,0 +1,230 @@
+---
+title: '리엑트 강의 정리 2'
+subtitle: 'React event, jsx'
+date: '2022-06-05'
+category: 'React'
+---
+
+# 이벤트
+
+리엑트로 이벤트리스너 실행하기  
+on으로 시작하는 이름의 props 추가.
+ex) onClick
+
+```js:🎉
+//1
+ <button onClick={()=>{console.log("Clicked!!!")}}>Change title</button>
+
+//2
+  const clickHandler = () => {
+    console.log("Clicked!!!");
+  };
+
+ <button onClick={clickHandler}>Change title</button>
+```
+
+1. **화살표 함수로 실행:** jsx에 너무 많은 로직을 넣으면 코드가 깔끔해 보이지 않음
+2. **함수를 생성하여 실행:** 만약 `clickHandler()`로 실행한다면 **사용자가 클릭했을 때**가 아니라 **jsx가 평가될때** 실행 된다. 때문에 **clickHandler를 지정**하기만 한다.
+
+# useState
+
+**useState**는 **리엑트 훅**이다.  
+**컴포넌트 안에서** **호출**이 되어야 한다.
+
+```ts:state
+  const [title, setTitle] = useState(props.title);
+```
+
+1. `useState(props.title)` **props.title** 초기값
+2. **title** 현재 상태값
+3. **setTitle** 현재 상태값을 변경하기 위한 함수
+
+state가 업데이트 되면 함수가 재실행 된다.
+그리고 jsx를 다시 평가.
+
+State에서 컴포넌트의 인스턴스(복제본)들은 독립적으로 존재
+특정 인스턴스만 리엑트가 재평가 함.
+
+상태값을 선언할 때 const로 선언하는 이유
+등호를 사용해서 값을 할당하지 않기 때문이다.
+
+title은 리엑트에서 가져옴
+
+# 사용자 입력 수신
+
+input 요소에서 사용자 입력 읽기
+
+```ts:state
+  const titleChangeHandler = (event) => {
+    console.log(event.target.value);
+  };
+```
+
+사용자 입력값 나옴 변경될때마다 콘솔에 찍힘.
+
+## 사용자 입력을 받아 State로 관리하기
+
+**useState** 사용 **한 번**으로 **여러 상태값** 관리 ➡️ **객체**로 관리한다.
+
+> **상태값 업데이트 시**에 이전 저장 값들은 잃어버리게 됨. **병합**하지 않고 **대체한다.**
+
+스프레드 문법을 사용해 객체를 업데이트
+
+```js:👀
+  const titleChangeHandler = (event) => {
+    setUserInput({
+      ...userInput,
+      enteredTitle: event.target.value,
+    });
+  };
+```
+
+# 전송값 수신
+
+submit 버튼 클릭으로 정보값 전송 시,
+form에서 받는다.
+
+# 양방향 바인딩
+
+사용자 입력 수신과 사용자 출력 변경이 가능.
+양방향 바인딩은 폼을 사용할때 매우 유용.
+폼 전송에 따라 사용자의 입력을 모으거나 변경할 수 있기 때문이다.
+
+폼 입력시 입력 데이터를 받고 전송 시 폼을 깔끔하게 비워놓음.
+
+```js
+<input
+    type="text"
+    value={enteredTitle}
+    // 입력
+    // 입력도 변경됨
+    onChange={titleChangeHandler}
+    // 출력
+    // 상태를 변경하면
+/>
+```
+
+# 자식요소에서 부모요소로 정보 전달하기
+
+props는 오직 부모요소에서 자식요소로만 전달할 수 있다 건너띄지 못 함
+
+전달방법
+
+-   1. 자식요소에 Props로 넘길 함수 생성
+
+```js:App.js
+  const addExpenseHandler = (expenses) => {
+    console.log('In App.js');
+    console.log(expenses);
+  };
+```
+
+-   2. props로 함수 넘겨주기
+
+```js:App.js
+ return (
+    <div>
+      <NewExpense onAddExpense={addExpenseHandler} />
+      // <Expenses items={expenses} />
+    </div>
+  );
+```
+
+-   2. props에 함수 포인터로 지목하기
+
+```js:NewExpense.js
+const NewExpense = (props) => {
+  const onSaveExpenseDataHandler = (enterExpenseData) => {
+    const expenseData = {
+      ...enterExpenseData,
+      id: Math.random().toString(),
+    };
+    props.onAddExpense(expenseData);
+  };
+
+  return (
+    <div className="new-expense">
+      <ExpenseForm onSaveExpenseData={onSaveExpenseDataHandler} />
+      {/* ()함수 실행이 아니라 포!인!터! 전달 */}
+    </div>
+  );
+};
+
+export default NewExpense;
+```
+
+props로 받고 함수 안에서 실행시킨다.
+
+# 상태 끌어올리기
+
+자식 컴포넌트에서 어떤 부모 컴포넌트로 데이터를 이동해서, 거기서 사용하거나 다른 자식요소로 전송
+
+# 상태가 없는 컴포넌트
+
+무상태 컴포넌트
+프레젠테이셔널 혹은 dumb 컴포넌트
+
+# 조건부 내용 출력하는 방법
+
+-   방법 1
+
+```js
+{
+    filterdExpenses.length === 0 ? (
+        <p>No expenses found</p>
+    ) : (
+        filterdExpenses.map((expense) => (
+            <ExpenseItem
+                key={expense.id}
+                title={expense.title}
+                amount={expense.amount}
+                date={expense.date}
+            />
+        ))
+    )
+}
+```
+
+-   방법 2
+
+```js
+{
+    filterdExpenses.length === 0 && <p>No expenses found</p>
+}
+{
+    filterdExpenses.length > 0 &&
+        filterdExpenses.map((expense) => (
+            <ExpenseItem
+                key={expense.id}
+                title={expense.title}
+                amount={expense.amount}
+                date={expense.date}
+            />
+        ))
+}
+```
+
+&& 연산자를 사용하면 조건 충족시에 다음 구문으로 넘어가게 된다.
+
+-   방법 3
+
+```js
+let expensesContent = <p>No expenses found.</p>
+// 변수에 Jsx 저장이 가능하다.
+
+if (filterdExpenses.length > 0) {
+    expensesContent = filterdExpenses.map((expense) => {
+        <ExpenseItem
+            key={expense.id}
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+        />
+    }
+}
+//충족시 위 변수에 할당
+
+return <div>{expensesContent}</div>
+```
+
+변수와 if문을 사용
