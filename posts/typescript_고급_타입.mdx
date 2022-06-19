@@ -1,0 +1,251 @@
+---
+title: 'typescript 고급 타입'
+subtitle: '인터섹션, 타입가드, 옵셔널 체이닝, 함수오버로딩'
+date: '2022-06-19'
+category: 'Typescript'
+---
+
+# 인터섹션
+
+## 일반타입
+
+& 를 사용하여 두 개의 타입을 결합  
+주석과같이 인터페이스도 결합이 가능하다.
+
+```ts
+type Admin = {
+    name: string;
+    privilege: string[];
+};
+//interface
+
+type Employee = {
+    name: string;
+    startDate: Date;
+    //Date도 타입에 속한다
+};
+//interface
+
+type ElevatedEmployee = Admin & Employee;
+//interface ElevatedEmployee extends Admin, Employee
+```
+
+## 유니언 타입
+
+```ts
+type Combinable = string | number;
+type Numeric = number | boolean;
+
+type Universal = Combinable & Numeric;
+```
+
+타입스크립트는 위 예제의 Universal을 number타입으로 추론한다.
+
+# 타입가드
+
+유니언 타입을 사용하다보면 정확히 어떤 타입인지 알아야 하고 동작이 달라져야하는 경우가 있음.  
+이때 사용하는 것이 바로 타입가드이다.
+
+> ❗️ 알아둬야할 것 if문은 런타임시 JS로 실행된다.
+
+## typeof
+
+```ts
+type Combinable = number | string;
+
+function add(a: Combinable, b: Combinable) {
+    if (typeof a === 'string' || typeof b === 'string') {
+        return a.toString() + b.toString();
+    }
+    return a + b;
+}
+```
+
+> ❗️예제의 문제점 : 반환값을 유니언 타입인 Combinable로 추론하기 때문에 메소드 사용 시 에러 발생 ➡️ 함수오버로딩
+
+## in
+
+프로퍼티 비교
+
+```ts
+type UnknownEmployee = Employee | Admin;
+
+function printEmployeeInformation(emp: UnknownEmployee) {
+    console.log('Name: ' + emp.name);
+    // in을 사용하여 속성명 검사
+    if ('privilege' in emp) {
+        console.log('privilege: ' + emp.privilege);
+    }
+    if ('startDate' in emp) {
+        console.log('startDate: ' + emp.startDate);
+    }
+}
+```
+
+## instanceof
+
+-   클래스에 사용
+-   인터페이스는 런타임 시 컴파일이 되지 않기 때문에 사용이 불가능하다.
+
+```ts
+class Car {
+    drive() {
+        console.log('Driving');
+    }
+}
+
+class Truck {
+    drive() {
+        console.log('Driving a truck...');
+    }
+    loadCargo(amount: number) {
+        console.log('driving a Cargo...' + amount);
+    }
+}
+
+type Vehicle = Car | Truck;
+
+const v1 = new Car();
+const v2 = new Truck();
+
+function useVehicle(vehicle: Vehicle) {
+    vehicle.drive();
+    if (vehicle instanceof Truck) {
+        vehicle.loadCargo(1000);
+    }
+}
+```
+
+# 구별된 유니언
+
+리터럴 타입 사용
+
+```ts
+interface Bird {
+    type: 'bird';
+    flyingSpeed: number;
+}
+
+interface Horse {
+    type: 'horse';
+    runningSpeed: number;
+}
+```
+
+## switch
+
+```ts
+type Animal = Bird | Horse;
+
+function moveAnimal(animal: Animal) {
+    let speed;
+    switch (animal.type) {
+        case 'bird':
+            speed = animal.flyingSpeed;
+            break;
+        case 'horse':
+            speed = animal.runningSpeed;
+    }
+    console.log('Moving at speed' + speed);
+}
+moveAnimal({ type: 'bird', flyingSpeed: 10 });
+```
+
+# 타입단언(형 변환)
+
+타입스크립트가 추론, 분석한 타입을 강제적으로 변경
+
+```ts
+const userInputElement = document.getElementById('user-input')! as HTMLInputElement;
+//1. as 사용
+
+const userInputElement = <HTMLInputElement>document.getElementById('user-input');
+//2. 홑화살괄호 사용
+//jsx와 헷갈릴 수 있으니 리엑트 사용 시에는 as 권장
+
+userInputElement = 'Hi there!';
+```
+
+-   `!`은 null을 받아오지 않을 거란 걸 타입스크립트에게 확신 시켜주는 것이다.
+
+# 인덱스 타입
+
+지정한 타입 범위 내에서 유용한 사용을 가능하게 함  
+키의 이름과 속성 개수를 제한하지 않음
+
+```ts
+interface ErrorContainer {
+    [prop: string]: string;
+}
+// 키와 값의 타입 지정
+// boolean은 키의 타입이 될 수 없다.
+
+const errorBag: ErrorContainer = {
+    email: 'Not a vaild email!',
+    username: 'Must start with capital cahractor',
+};
+```
+
+# 함수 오버로딩
+
+매개변수의 타입, 갯수 그리고 반환 타입이 다른 함수를 여러개 정의할 수 있다.
+
+```ts
+// function add(n: number): number;
+// function add(n: string): string;
+// 매개변수와 if문에 optional 사용 시 에러 처리를 해줘야 함
+
+function add(a: string, b: string): string;
+function add(a: number, b: number): number;
+function add(a: Combinable, b: Combinable) {
+    if (typeof a === 'string' || typeof b === 'string') {
+        return a.toString() + b.toString();
+    }
+
+    return a + b;
+}
+
+const result = add('Max', 'Schwarz');
+result split(',');
+// result의 타입 string
+```
+
+# 옵셔널 체이닝
+
+존재여부가 불확실한 값에 접근할 경우, 런타임 에러를 방지할 수 있다.  
+null이나 undifined인 값에 접근하면 **실행을 중지**하고 undfined를 반환
+
+```ts
+// javascript
+// console.log(fetchedUserData.job && fetchedUserData.job.title);
+
+const fetchUserData = {
+    id: 'u1',
+    name: 'Max',
+    // job:{title: 'CEO', description: 'My own company'}
+};
+
+console.log(fetchUserData?.job?.title);
+```
+
+컴파일시 if문으로 변경됨.
+
+# null 병합
+
+`??`를 사용하여 확정된 값을 반환한다.
+
+**a ?? b**일 경우
+
+-   a가 null도 아니고 undefined도 아니면 a
+-   위의 경우가 아니라면 b
+
+```ts
+const userInput = undefined;
+
+const storedData = userInput ?? 'DEFAULT';
+
+console.log(storedData);
+// 'DEFAULT'
+```
+
+`||` 참 거짓이 아니라 **확정된 값**을 찾는다는 점에서 다르다
