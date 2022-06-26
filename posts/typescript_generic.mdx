@@ -1,0 +1,177 @@
+---
+title: 'typescript 제네릭'
+subtitle: 'Typescript Generics'
+date: '2022-06-27'
+category: 'Typescript'
+---
+
+# 제네릭
+
+-   **제네릭**이란, **사용시점**에 **타입을 선언**하는 것
+-   타입을 **인자**처럼 사용하는 것이 가능하다.
+
+# 제네릭 함수
+
+```ts
+function merge<T, U>(objA: T, objB: U) {
+    return Object.assign(objA, objB);
+}
+
+// 1
+const mergeObj = merge<{ name: string; hobbies: string[] }, { ages: number }>(
+    { name: 'Max', hobbies: ['Sports'] },
+    { ages: 30 }
+);
+
+// 2
+const mergeObj = merge({ name: 'Max', hobbies: ['Sports'] }, { ages: 30 });
+```
+
+-   제네릭 함수는 **호출시**에 타입이 결정된다
+-   호출방법은 두가지 모두 가능하나, 방법 2가 좀더 흔하게 쓰이는 방법임
+-   merge 함수의 **반환타입**은 `T & U` **인터섹션 타입**으로 **추론됨**
+
+# 제약 조건
+
+**제약조건**을 사용하여 제네릭의 **구체적인 타입의 범위**를 좁할 수 있음
+
+```ts
+function merge<T extends object, U extends object>(objA: T, objB: U) {
+    return Object.assign(objA, objB);
+}
+
+const mergeObj = merge({ name: 'hyn', hobbies: ['Sports'] }, 30);
+// 🚫 Error
+
+interface Lengthy {
+    length: number;
+}
+// length 속성을 지녀야함을 명시
+
+function counting<T extends Lengthy>(element: T) {
+    console.log(element.length);
+    // Lengthy 미설정시 T가 length를 가지는 타입임을 보장할 수 없음
+    return element;
+}
+
+counting(10);
+// 🚫 Error
+```
+
+# 객체 속성 제약
+
+```ts
+function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
+    return 'Value' + obj[key];
+}
+
+extractAndConvert({ name: 'hyn' }, 'name'); //  ✅
+extractAndConvert({ name: 'hyn' }, 'age'); // 🚫 Error
+```
+
+-   `extends keyof` 미작성 시 **객체 T**에 **U 속성**이 존재함을 **보장할 수 없으므로** 에러 발생
+
+# 제네릭 클래스
+
+```ts
+class DataStorage<T extends string | number | boolean> {
+    private data: Array<T> = [];
+
+    addItem(item: T) {
+        this.data.push(item);
+    }
+
+    removeItem(item: T) {
+        if (this.data.indexOf(item) === -1) {
+            return;
+        }
+        this.data.splice(this.data.indexOf(item), 1); //찾지못한다면 -1 반환 마지막요소 제거
+    }
+
+    getItems() {
+        return [...this.data];
+    }
+}
+
+const textStorage = new DataStorage<string>();
+textStorage.addItem('Max');
+textStorage.addItem('Manu');
+textStorage.removeItem('Max');
+console.log(textStorage.getItems());
+
+const numberStorage = new DataStorage<number>();
+```
+
+-   위 클래스는 오브젝트 타입에 적합하지 않음
+-   따라서 `extends string | number | boolean` 으로 제한
+-   제네릭에 **불리언 타입**을 사용하는 것이 가능하다
+
+# Union vs Generics
+
+이전 **제네릭** 클래스 예시코드를 **유니온 타입**으로 **변경**하는 경우
+
+```ts
+class DataStorage {
+    private data: string[] | number[] | boolean[] = [];
+
+    addItem(item: string | number | boolean) {
+        this.data.push(item);
+    }
+
+    removeItem(item: string | number | boolean) {w
+        if (this.data.indexOf(item) === -1) {
+            return;
+        }
+        this.data.splice(this.data.indexOf(item), 1);
+    }
+
+    //...
+```
+
+-   이전 **제네릭 방식**에서는 **지정한 T타입이** 메소드에도 **동일적용** 되었음 `고정적`
+-   **유니온 방식**에서는 **메소드를 호출**할 때마다 **다른 타입**을 넣어 **호출**하는 것이 가능하다 `유연함`
+
+# 유틸리티(Partial,Readonly)
+
+## Partial
+
+```ts
+interface CourseGoal {
+    title: string;
+    description: string;
+    completeUntil: Date;
+}
+
+function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
+    let CourseGoal: Partial<CourseGoal> = {};
+
+    CourseGoal.title = title;
+    CourseGoal.description = description;
+    CourseGoal.completeUntil = date;
+
+    return CourseGoal as CourseGoal;
+}
+```
+
+-   **Partial**은 타입의 모든 속성들을 **선택적** **optional**으로 만들어 준다.
+-   함수의 return타입인 **변수 CourseGoal**은 선택적 타입인 `Partial<CourseGoal>`와 다르므로 **형변형**
+
+## Readonly
+
+```ts
+const readonly: Readonly<string[]> = ['Max', 'Anna'];
+readonly.push('Manu');
+// 🚫 Error
+
+readonly.pop('Manu');
+// 🚫 Error
+```
+
+-   **Readonly**는 타입의 모든 속성들을 **읽기전용**으로 만든다.
+-   **데이터 수정**이 **불가능**하므로 에러 발생
+
+---
+
+# ref
+
+[**타입스크립트 핸드북**](https://joshua1988.github.io/ts/guide/generics.html#%EC%A0%9C%EB%84%A4%EB%A6%AD-%EC%A0%9C%EC%95%BD-%EC%A1%B0%EA%B1%B4**)
