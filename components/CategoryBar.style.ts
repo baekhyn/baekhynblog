@@ -1,8 +1,8 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
 export const CategoryStyle = styled.ul`
     list-style: none;
-`
+`;
 
 export const CategoryText = styled.li`
     h1 {
@@ -13,7 +13,7 @@ export const CategoryText = styled.li`
         margin-left: 0.5rem;
         padding: 0.3rem;
         width: 90%;
-        background-image: var(--rose-blue);
+        background-image: var(--ocean);
         transition-property: width;
         transition-duration: 1s, 5s;
         transition-delay: 0.1s;
@@ -21,4 +21,4 @@ export const CategoryText = styled.li`
             width: 65%;
         }
     }
-`
+`;

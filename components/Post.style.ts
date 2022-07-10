@@ -1,16 +1,16 @@
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 const fontSize = css`
     @media (max-width: 420px) {
         font-size: 0.5em;
     }
-`
+`;
 const align = css`
     @media (max-width: 505px) {
         text-align: left;
     }
-`
+`;
 
 const margin = css`
     @media (max-width: 420px) {
@@ -19,7 +19,7 @@ const margin = css`
     @media (max-width: 505px) {
         padding: 0 0.3rem;
     }
-`
+`;
 
 export const PostStyle = styled.ul`
     padding: 0 1rem;
@@ -34,7 +34,7 @@ export const PostStyle = styled.ul`
         margin: 1em;
         padding: 1em;
         &:hover {
-            background-image: var(--yellow-violet);
+            background-image: var(--ocean);
             border-radius: 12px;
         }
     }
@@ -77,7 +77,7 @@ export const PostStyle = styled.ul`
         margin-right: 0.5rem;
         color: var(--light-gray);
     }
-`
+`;
 export const NoPost = styled.h2`
     text-align: center;
-`
+`;
