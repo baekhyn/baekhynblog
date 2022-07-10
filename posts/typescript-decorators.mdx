@@ -1,0 +1,470 @@
+---
+title: 'typescript 데코레이터'
+subtitle: 'Typescript Decorators'
+date: '2022-07-10'
+category: 'Typescript'
+---
+
+# 데코레이터 (Decorators)
+
+-   **데코레이터**란 **특정한 형식 (Class)에** **적용**할 수 있는 **함수**를 말한다
+    -   함수의 형태를 지니며 `@function`식으로 적용한다
+
+# tsconfig.json ⚙️
+
+```json
+"experimentalDecorators": true
+```
+
+-   데코레이터 사용을 위해 다음과 같이 설정해줘야 한다
+-   오류 시 해당라인 앞에 쉼표 기입
+
+# 실행 타이밍
+
+데코레이터는 **클래스 선언**이 **런타임**에 **첫 평가**될 때 **한 번 실행**된다
+
+```ts
+function Log(constructor: Function) {
+    console.log(constructor);
+}
+
+@Log
+class Box {
+    item: 'log';
+
+    constructor() {
+        console.log('Creating obj...');
+    }
+}
+
+const box1 = new Box();
+console.log(box1);
+```
+
+위 코드를 콘솔에 실행한 결과
+
+```http
+>  class Box  {
+    constructor() {
+        this.item = 'log';
+        console.log('Creating obj...');
+    }
+}
+> Creating obj...
+> Box {item: 'log}
+```
+
+-   **데코레이터 실행**은 클래스의 **인스턴스 생성여부**와 무관하다.
+-   **클래스 정의**가 되면 **데코레이터가 실행**됨
+-   **인스턴스화(new)** 하는 **코드부분**을 **삭제해도** 데코레이터는 **콘솔창에** **확인 가능 함**
+
+## Mutiple of Decorator
+
+```ts
+function Log(param: string) {
+    console.log('evaluate :', param);
+    return function () {
+        console.log('call :', param);
+    };
+}
+
+
+class Box {
+    Method(
+    @Log('A') A,
+    @Log('B') B
+    ){}
+    ...
+}
+```
+
+```http
+> evaluate: A
+> evaluate: B
+> call: B
+> call: A
+```
+
+-   위 코드는 데코레이터 팩토리 형식임
+-   **평가**(evaluate)와 **실행**(call)이 다른 순서로 실행된다.
+    -   `평가`: 순서대로
+    -   `실행`: 아래서 위로
+
+# Decorator Factory
+
+```ts
+function Log(param: string) {
+    return function (constructor: Function) {
+        console.log(param);
+        // 파라미터 활용
+        console.log(constructor);
+    };
+}
+
+@Log('this is a Decorator Factory')
+class Box {
+    item = 'log';
+
+    constructor() {
+        console.log('Creating obj...');
+    }
+}
+```
+
+```http
+> this is a Decorator Factory
+> class Box {
+   constructor() {
+        this.item = 'log';
+        console.log('Creating obj...');
+    }
+}
+```
+
+-   **데코레이터를 리턴**하는 **함수** 작성
+-   **적용 시** 함수를 **포인트**하는게 아니라 **인자**를 넣어 **실행** `@Log()`
+-   **파라미터**를 **전달**할 수 있기 때문에 **활용성**이 좋다
+
+# Template with Decorator Factory
+
+```html
+<body>
+    <div id="app"></div>
+</body>
+```
+
+```ts
+function WithTemplate(element: string, id: string) {
+    return function (_: Function) {
+        const myEl = document.getElementById(id);
+        if (myEl) {
+            myEl.innerHTML = element;
+        }
+    };
+}
+
+@WithTemplate('<h1>This is My First Template! </h1>','app')
+```
+
+-   `_`인자를 함수 내부에서 사용하지 않음
+-   팩토리로 인자를 넣어 DOM을 생성
+
+```ts
+function WithTemplate(element: string, id: string) {
+    return function (constructor: any) {
+        const myEl = document.getElementById(id);
+        const p = new constructor();
+        if (myEl) {
+            myEl.innerHTML = element;
+            myEl.querySelector('h1')!.textContent = p.item;
+        }
+    };
+}
+@WithTemplate('<h1>This is My First Template! </h1>', 'app')
+class Box {
+    item = 'log';
+    ...
+}
+```
+
+-   Class의 프로퍼티로 HTML 텍스트 변경
+-   `!` null이 아님을 증명
+
+# Decorator 종류
+
+1.  Class
+2.  Class Property
+3.  Class Method
+4.  Class Accessor
+5.  Class Method Parameter
+
+**적용 위치**
+
+```ts
+@ClassDecorator
+class Cafe {
+    @PropertyDecorator
+    manu: string;
+    private _price: number;
+
+    @AccessorDecorator
+    set price(val: number) {}
+
+    @MethodDecorator
+    getPriceWithTax(@ParamDecorator a: number) {}
+}
+```
+
+-   **데코레이터의 종류**에 따라 **적용 위치**`@`가 다르다
+
+## Class Decorator
+
+```ts
+function Log(target: Function) {
+    console.log('Class decorator!');
+    console.log(target);
+}
+```
+
+-   데코레이터 함수가 받는 인자
+    -   **target:** 생성자 함수 (프로토타입)
+-   데코레이터 함수가 리턴하는 값
+    -   **Return:** return 값이 있다면 클래스 선언을 대체할 수 있음
+
+### ClassDecorator로 클래스 반환 및 변경
+
+```ts
+function WithTemplate(template: string, hookId: string) {
+    return function <T extends { new (...args: any[]): { item: string } }>(originalConstructor: T) {
+        return class extends originalConstructor {
+            constructor(..._: any[]) {
+                super();
+                const hookEl = document.getElementById(hookId);
+                // const p = new originalConstructor();
+                if (hookEl) {
+                    hookEl.innerHTML = template;
+                    hookEl.querySelector('h1')!.textContent = this.item;
+                }
+            }
+        };
+        //클래스 이름이 없어도 됨
+    };
+}
+```
+
+## Property Decorator
+
+```ts
+function Log(target: any, porpertyName: string | Symbol) {
+    console.log('Property decorator!');
+    console.log(target, porpertyName);
+}
+```
+
+-   데코레이터 함수가 받는 인자
+    -   **target:** 생성자 함수
+    -   **porpertyName:** 프로퍼티의 이름
+-   반환값은 무시된다.
+
+## Method Decorator
+
+```ts
+function Log3(target: any, name: string, descriptor: PropertyDescriptor) {
+    console.log('Method decorator!');
+    console.log(target);
+    console.log(name);
+    console.log(descriptor);
+}
+```
+
+-   **PropertyDescriptor**는 내장된 타입
+-   데코레이터 함수가 받는 인자
+    -   target: 생성자 함수
+    -   name: 메소드 이름
+    -   descriptor : descriptor
+-   데코레이터 함수가 리턴하는 값
+    -   descriptor
+
+메소드 데코레이터 사용 예시  
+**Autobind**를 수행하는 데코레이터
+
+```html
+<button>Click me</button>
+```
+
+```ts
+function Autobind(_: any, _2: string, descriptor: PropertyDecorator) {
+    const originalMethod = decorator.value;
+    //메서드 접근
+    const adjDescriptor: PropertyDescriptor = {
+        configurable: true,
+        enumerable: false,
+        get() {
+            const boundFn = originalMethod.bind(this);
+            return boundFn;
+        },
+    };
+    return adjDescriptor;
+}
+
+class Printer {
+    message = 'This works!';
+
+    @Autobind
+    showMessage() {
+        console.log(this.message);
+    }
+}
+
+const p = new Printer();
+
+const button = document.querySelector('button')!;
+button.addEventListener('click', p.showMessage);
+
+// button.addEventListener('click', p.showMessage.bind(p));
+```
+
+-   target 바인딩
+-   디스크립터 객체를 반환하여 이전 디스크립터를 덮어쓴다
+
+## Accessor Decorator
+
+```ts
+function Log3(target: any, name: string, descriptor: PropertyDescriptor) {
+    console.log('Method decorator!');
+    console.log(target);
+    console.log(name);
+    console.log(descriptor);
+}
+```
+
+-   **PropertyDescriptor**는 내장된 타입
+-   데코레이터 함수가 받는 인자
+    -   target: constructor 함수
+    -   name: 접근자 이름
+    -   descriptor : descriptor
+-   데코레이터 함수가 리턴하는 값
+    -   descriptor
+
+## Parameter Decorator
+
+```ts
+function Log4(target: any, name: string | Symbol, position: number) {
+  console.log('Parameter decorator!');
+  console.log(target);
+  console.log(name);
+  console.log(position);
+```
+
+-   데코레이터 함수가 받는 인자
+    -   target: constructor 함수 혹은 인스턴스의 클래스의 프로토타입
+    -   name: 메소드나 프로퍼티 이름
+    -   position : 파라미터의 인덱스 넘버
+-   데코레이터 함수가 리턴하는 값
+    -   무시됨
+
+# 데코레이터로 타당성 검증하기
+
+```html
+<form>
+    <input type="text" placeholder="Course title" id="title" />
+    <input type="text" placeholder="Course price" id="price" />
+    <button type="submit">Save</button>
+</form>
+```
+
+```ts
+class Course {
+    title: string;
+    price: number;
+
+    constructor(t: string, p: number) {
+        this.title = t;
+        this.price = p;
+    }
+}
+
+const courseForm = document.querySelector('form')!;
+courseForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const titleEl = document.getElementById(title) as HTMLInputElement;
+    const priceEl = document.getElementById(price) as HTMLInputElement;
+
+    const title = titleEl.value;
+    const price = priceEl.value;
+
+    const createCourse = new Course(title, price);
+    console.log(createCourse);
+});
+```
+
+-   폼(input) 작성 후 전송 시
+
+```http
+> {title:"typescript", price: 30}
+> {title:"", price: 0} ❗️
+```
+
+-   문제상황: 유효하지 않은 폼을 작성하여도 인스턴스가 생성된다.
+
+데코레이터로 타당성 검증 및 해결
+
+```ts
+const courseForm = document.querySelector('form')!;
+courseForm.addEventListener('submit', (event) => {
+    ...
+    if(!validate(createCourse)){
+        alert('Invalid input, please try again')
+    }
+
+    console.log(createCourse);
+});
+```
+
+-   `validate`라는 함수를 만들어 호출하여 유효성 검증
+
+```ts
+class Course {
+    @Required
+    title: string;
+    @PositiveNumber
+    price: number;
+
+    constructor(t: string, p: number) {
+        this.title = t;
+        this.price = p;
+    }
+}
+```
+
+-   위와같이 각각의 프로퍼티에 데코레이터 적용
+
+`validate`함수와 `@Required` `@PositiveNumber`데코레이터의 내용은 다음과 같다
+
+```ts
+interface ValidatorConfig {
+    [property: string]: {
+        [validatableProps: string]: string[]; //['required','positive']
+    };
+}
+
+const registeredValidators: ValidatorConfig = {};
+
+function Required(target: any, propName: string) {
+    registeredValidators[target.constructor.name] = {
+        ...registeredValidators[target.constructor.name],
+        [propName]: ['required'],
+    };
+}
+
+function PositiveNumber(target: any, propName: string) {
+    registeredValidators[target.constructor.name] = {
+        ...registeredValidators[target.constructor.name],
+        [propName]: ['positive'],
+    };
+}
+
+function validate(obj: any) {
+    const objValidatorConfig = registeredValidators[obj.constructor.name];
+    if (!objValidatorConfig) {
+        return true;
+        // 아무 것도 없다면 검사할게 없기 때문에 객체는 유효
+    }
+    let isValid = true;
+    for (const prop in objValidatorConfig) {
+        // 모든 내용들 검사
+        for (const validator of objValidatorConfig[prop]) {
+            // 프로퍼티 값 저장
+            switch (validator) {
+                case 'required':
+                    isValid = isValid && !!obj[prop];
+                    break;
+                case 'positive':
+                    isValid = isValid && obj[prop] > 0;
+                    break;
+            }
+        }
+    }
+    return isValid;
+}
+```
