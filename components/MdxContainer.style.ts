@@ -1,39 +1,42 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
 export const MdxStyle = styled.div`
     min-height: 1000px;
     padding: 0.1rem;
     margin: 1em 2em;
-    line-height: 34px;
+    line-height: 33px;
     font-size: 1rem;
 
-    h1,h2,h3,h4{
-        color:var(--blue-gray);
+    h1,h2,h3,h4 {
+        padding: 20px;
+        border-bottom: solid 1px;
     }
 
     h1 {
-        margin: 2rem 0;
-        font-weight:600;
+        margin: 2rem 1rem;
+        font-weight: 800;
         font-size: 1.3rem;
     }
 
     h2 {
-        margin: 2rem 0;
+        margin: 2rem 1rem;
+        font-weight: 700;
         font-size: 1.2rem;
     }
 
     h3 {
-        margin: 2rem 0;
+        margin: 2rem 1rem;
+        font-weight: 600;
         font-size: 1.1rem;
     }
 
     h4 {
-        margin: 2rem 0;
+        margin: 2rem 1rem;
         font-size: 1rem;
     }
 
     p {
-        margin: 0.8rem;
+        margin: 2rem;
         margin-bottom:20px;
     }
 
@@ -53,15 +56,17 @@ export const MdxStyle = styled.div`
         padding-left: 1.4rem;
     }
 
+
     code {
-        background: var(--rose-blue);
-        border: solid 1px var(--light-gray);
+        background: var(--dark-gray);
         border-radius: 5px;
-        padding: 2px 5px;
+        padding: 3px 5px;
+        margin: 3px;
         font-size: 14px;
         font-weight: 500;
+        border:solid 1px;
         &[class^="language"]{
-            background: var(--sub-gray);
+            background: var(--code-black);
             border: none;
         }
     }
@@ -78,10 +83,11 @@ export const MdxStyle = styled.div`
     }
 
     img{
-        width:100%
+        width:80%;
+        margin: 0 auto;
     }
 
     .headings{
         display:block;
     }
-`
+`;

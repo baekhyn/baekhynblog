@@ -1,11 +1,11 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
 export const TitleBox = styled.div`
     padding: 0.1rem;
     padding-bottom: 1rem;
-    margin: 1em 2em;
+    margin: 1em 52px;
     margin-top: 2em;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
     border-bottom: solid 1px;
 
     h1 {
@@ -25,7 +25,7 @@ export const TitleBox = styled.div`
         margin-bottom: 0.3em;
         padding: 0.4em;
         border-radius: 12px;
-        background-image: var(--rose-blue);
+        background-image: var(--ocean);
     }
     div {
         font-size: 0.8em;
@@ -34,4 +34,4 @@ export const TitleBox = styled.div`
         display: inline-block;
         color: var(--light-gray);
     }
-`
+`;
