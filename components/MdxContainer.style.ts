@@ -9,30 +9,29 @@ export const MdxStyle = styled.div`
 
     h1,h2,h3,h4 {
         padding: 20px;
-        border-bottom: solid 1px;
     }
 
     h1 {
         margin: 2rem 1rem;
         font-weight: 800;
-        font-size: 1.3rem;
+        font-size: 28px;
     }
 
     h2 {
         margin: 2rem 1rem;
         font-weight: 700;
-        font-size: 1.2rem;
+        font-size: 24px;
     }
 
     h3 {
         margin: 2rem 1rem;
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: 20px;
     }
 
     h4 {
         margin: 2rem 1rem;
-        font-size: 1rem;
+        font-size: 16px;
     }
 
     p {
@@ -58,16 +57,17 @@ export const MdxStyle = styled.div`
 
 
     code {
+        font-family: Söhne Mono, menlo, monospace;
         background: var(--dark-gray);
         border-radius: 5px;
-        padding: 3px 5px;
+        padding: 6px 10px;
         margin: 3px;
         font-size: 14px;
-        font-weight: 500;
-        border:solid 1px;
+        font-weight: 800;
         &[class^="language"]{
             background: var(--code-black);
             border: none;
+            font-weight: 500;
         }
     }
 

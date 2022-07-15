@@ -6,10 +6,9 @@ export const TitleBox = styled.div`
     margin: 1em 52px;
     margin-top: 2em;
     margin-bottom: 2em;
-    border-bottom: solid 1px;
 
     h1 {
-        font-size: 24px;
+        font-size: 28px;
         margin-left: 0;
         margin-bottom: 0.5em;
         font-weight: 700;

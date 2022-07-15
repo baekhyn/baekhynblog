@@ -41,17 +41,20 @@ a {
 
 nav.toc {
     margin-left: 14px;
+    background-color: var(--dark-gray);
+    border-radius: 10px;
+    padding: 10px;
 }
 
 nav > ol {
     list-style: square;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 14px;
     padding: 3px;
 }
 
 a[class*='toc-link'] {
-    color: var(--blue);
+    color: var(--light-gray);
 }
 
 li > ol {
