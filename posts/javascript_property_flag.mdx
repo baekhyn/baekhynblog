@@ -1,0 +1,224 @@
+---
+title: 'javascript 프로퍼티 플래그'
+subtitle: 'javascript property flag, descriptor'
+date: '2022-07-22'
+category: 'Javascript'
+---
+
+# 프로퍼티 플래그
+
+**객체 프로퍼티**는 **값(value)과** 함께 **플래그(flag)속성**을 가진다  
+해당 플래그 값 `true` 시
+
+1. `writable`: **값 수정** 가능
+2. `enumerable`: **반복문**을 사용해 **나열** 가능
+3. `configurable`: **프로퍼티 삭제**나 **플래그 수정**이 가능
+
+**일반적인 방식**으로 생성한 **거의 모든 객체**들은 **플래그 값들이** **true**로 설정되어 있음
+
+# Object.getOwnPropertyDescriptor( )
+
+`Object.getOwnPropertyDescriptor()`을 사용해 해당 **프로퍼티**의 **플래그 정보**를 얻을 수 있다
+
+```js
+const descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
+```
+
+-   `obj`: 객체
+-   `propertyName`: 객체 내 프로퍼티 이름
+
+## descriptor
+
+위 메소드 호출 시 **프로퍼티 설명자(descriptor) 객체**가 **반환(return)** 됨  
+**설명자 객체**는 다음 **속성**을 가진다
+
+**1. value**  
+**2. writable**  
+**3. iterable**  
+**4. configurable**
+
+```js
+const person = {
+    name: 'hyn',
+    age: 23,
+};
+
+const descriptor = Object.getOwnPropertyDescriptor(person, 'name');
+// 객체, 객체 이름 기입
+
+console.log(descriptor);
+```
+
+```http
+> {
+    "value": "hyn",
+    "writable": true,
+    "enumerable": true,
+    "configurable": true
+   }
+```
+
+-   **name 속성의** **설명자** 확인
+
+## Object.getOwnPropertyDescriptors( )
+
+`Object.getOwnPropertyDescriptors()`를 사용하면 **프로퍼티 설명자(descriptor)를** **한꺼번에** 가져올 수 있다.
+
+```js
+Object.getOwnPropertyDescriptors(obj);
+```
+
+-   `obj`: 해당 객체
+
+```js
+const person = {
+    name: 'hyn',
+    age: 23,
+};
+
+let properties = Object.getOwnPropertyDescriptors(person);
+
+console.log(properties);
+```
+
+```http
+> {name: {…}, age: {…}}
+> age: {value: 23, writable: true, enumerable: true, configurable: true}
+> name: {value: 'hyn', writable: true, enumerable: true, configurable: true}
+```
+
+###
+
+# Object.defineProperty( )
+
+`Object.defineProperty()`을 사용해 **플래그**를 **변경**할 수 있다.
+
+```js
+Object.defineProperty(obj, propertyName, descriptor);
+```
+
+-   `obj, propertyName` : 수정하고 싶은 객체와 속성명
+-   `descriptor` : 적용하고자 하는 설명자 객체
+
+```js
+let person = {};
+
+Object.defineProperty(person, 'name', {
+    value: 'hyn',
+});
+
+let descriptor = Object.getOwnPropertyDescriptor(person, 'name');
+
+console.log(descriptor);
+```
+
+```http
+> {
+    "value": "hyn",
+    "writable": false,
+    "enumerable": false,
+    "configurable": false
+   }
+```
+
+-   객체에 변경하고자 하는 **해당 프로퍼티**가 있으면 **변경**, 없으면 **생성**한다
+-   **객체**에도 없고 **넘겨 받은 descriptor**에도 없는 **플러그**는 자동으로 `false`로 **생성**된다.
+
+## Object.defineProperties( )
+
+`Object.defineProperties()`를 사용하면 하나의 객체의 프로퍼티 여러개를 한번에 정의하는 것이 가능하다.
+
+```js
+Object.defineProperties(obj, {
+    prop1: descriptor1,
+    prop2: descriptor2,
+});
+```
+
+# writable
+
+```js
+let person = { name: 'hyn' };
+
+Object.defineProperty(person, 'name', { writable: false });
+
+person.name = 'jake';
+//🚫 Error
+```
+
+-   `writable: false` 설정 시 **값 수정**이 불가능하다
+-   `defineProperty()`를 사용하여 **프로퍼티**를 **생성한 경우**가 아니므로 **기본 플래그 설정**이 `true`로 되어있음
+
+> ⚠️ Error
+>
+> -   **비 엄격 모드(strict)** 에서는 **플래그에 반하는 경우**가 감지되지 않는다 **(에러발생X)**
+
+# enumerable
+
+```js
+let person = {
+    name: 'hyn',
+    toString() {
+        return this.name;
+    },
+};
+for (let key in person) console.log(key);
+```
+
+```http
+> name, toString
+```
+
+-   person에 **커스텀** 메소드 `toString` 추가
+-   **내장 메소드**가 아닌 **커스텀 메소드**을 사용하면 `for..in` 사용이 가능하다.
+-   **객체 생성**시 **플래그 기본값**이 `true`이기 때문
+
+```js
+person.defineProperty(person, 'toString', { enumerable: false });
+//플래그 수정
+for (let key in person) console.log(key);
+```
+
+```http
+> name
+```
+
+-   **name**만 보이고 **toString**은 보이지 않음
+-   열거 불가능한 (enumerable이 아닌) 프로퍼티는 `Object.keys`에서도 배제 됨
+
+# configurable
+
+**configurable: false**를 설정하면 돌이킬 방법이 없다
+`defineProperty()`로도 불가능 함
+
+`configurable: false`설정 시 제약사항
+
+**1. configurable 플래그**를 수정할 수 없음  
+**2. enumerable 플래그**를 수정할 수 없음  
+**3. writable 플래그**를 `false ➡️ true`로 수정할 수 없음 (**반대의 경우는 가능하다**)  
+**4.** 접근자 프로퍼티 `get/set`을 변경할 수 없음(**새롭게 생성은 가능하다**)
+
+영원히 변경 불가능한 프로퍼티
+
+```js
+let person = {};
+
+Object.defineProperty(person, 'name', {
+    value: 'hyn',
+    writable: false,
+    configurable: false,
+});
+
+user.name = 'Pete';
+//🚫 Error
+delete user.name;
+//🚫 Error
+Object.defineProperty(user, 'name', { value: 'Pete' });
+//🚫 Error
+Object.defineProperty(user, 'name', { writable: true });
+//🚫 Error
+```
+
+# Ref
+
+**https://ko.javascript.info/property-descriptors**
