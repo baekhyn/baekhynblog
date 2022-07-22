@@ -1,0 +1,215 @@
+---
+title: 'javascript 프로퍼티 getter setter'
+subtitle: 'javascript property getter setter'
+date: '2022-07-22'
+category: 'Javascript'
+---
+
+# 객체의 프로퍼티
+
+**자바스크립트**의 **객체 프로퍼티**는 **두 가지**로 나뉜다.
+
+1. **데이터 프로퍼티 (data property)**
+    - `value`를 가짐
+2. **접근자 프로퍼티 (accessor property)**
+    - `get/set` 메소드를 가짐
+
+```js
+Object.defineProperty(user, 'name', {
+    get() {
+        return 1;
+    },
+
+    value: 2,
+});
+
+// 🚫 Error
+```
+
+-   객체 프로퍼티는 두 가지 중 **한 가지만** 속할 수 있다.
+-   `get/set` 과 `value`를 **동시에** 설정하면 에러 발생
+
+# getter setter
+
+```js
+let obj = {
+    get propName {
+        // getter.propName
+    }
+    set propName {
+        // setter.propName = value
+    }
+}
+```
+
+-   `getter`: 프로퍼티를 **읽으려할 때** 실행 **(획득자)**
+-   `setter`: 프로퍼티에 **값을 할당할 때** 실행 **(설정자)**
+
+> 📌
+>
+> -   getter setter에 익숙하지 않아 매번 마주칠 때마다 헷갈린다
+> -   getter 어떻게 보여줄까?
+> -   setter 어떻게 저장할까(다룰까)
+
+## getter
+
+```js
+let user = {
+    name: 'Joja',
+    surname: 'Smith',
+
+    get fullName() {
+        return `${this.name} ${this.surname}`;
+    },
+};
+
+console.log(user.fullName);
+```
+
+```http
+> "Joja Smith"
+```
+
+-   **함수**에서 **호출**하지 않고 **일반 값**에 **접근**하는 것처럼 값을 얻을 수 있음
+
+<i>
+
+    "바깥 코드에선 접근자 프로퍼티를 일반 프로퍼티처럼 사용할 수 있습니다. 접근자 프로퍼티는 이런
+    아이디어에서 출발했습니다. 접근자 프로퍼티를 사용하면 함수처럼 호출 하지 않고, 일반 프로퍼티에서
+    값에 접근하는 것처럼 평범하게 user.fullName을 사용해 프로퍼티 값을 얻을 수 있습니다. 나머지
+    작업은 getter 메서드가 뒷단에서 처리해줍니다." {`-`} [**모던 javascript
+    튜토리얼**](https://ko.javascript.info/)
+
+</i>
+
+## setter
+
+```js
+let user = {
+    //...
+};
+
+user.fullName = 'Hi';
+// 🚫 Error
+```
+
+-   **값 할당 시** 프로퍼티에 `getter` 메소드만 존재하기 때문에 위와 같이 **오류 발생**
+-   `setter` 메소드를 만들면 오류가 발생하지 않는다
+
+```js
+let user = {
+    name: 'Joja',
+    surname: 'Smith',
+
+    get fullName() {
+        return `${this.name} ${this.surname}`;
+    },
+
+    set fullName(value) {
+        [this.name, this.surname] = value.split('');
+    },
+};
+
+user.fullName = 'Amy Winehouse';
+
+console.log(user.name);
+console.log(user.surname);
+```
+
+```http
+> "Amy"
+> "Winehouse"
+```
+
+-   `""` 빈 문자열을 기준으로 **문자열 나누기**
+-   각각 `name`과 `surname`에 **할당하기**
+-   **getter**와 **setter** 메서드를 구현하면 객체에는 `fullName`이라는 **가상의 프로퍼티**가 있음
+    -   이 **가상의 프로퍼티**는 읽고 쓸 순 있지만 **실제로 존재하지는 않는다.**
+
+# descriptor
+
+이전해 작성했던 [**포스트**](/posts/javascript_property_flag)의 **설명자**는 **데이터 프로퍼티(data property)의** 설명자이다.  
+**데이터 프로퍼티의** 설명자는 **값과 플래그** 정보만 가지고 있지만  
+**접근자 프로퍼티(accessor property)의** 설명자는 다음과 같은 설명자를 가진다.
+
+1. `get`: **인수 없는** 함수, 프로퍼티를 **읽을 때** 동작
+2. `set`: **인수 있는** 함수, 프로퍼티에 **값을 넣을 때** 동작
+3. `enumerable`: 데이터 프로퍼티 설명자와 동일
+4. `configurable`: 데이터 프로퍼티 설명자와 동일
+
+# getter setter 활용하기
+
+```js
+let user = {
+    get name() {
+        return this._name;
+    }
+
+    set name(value) {
+        if(value.length < 4) {
+            alert("입력한 값이 네 글자 이하입니다.")
+            return;
+        }
+        this._name = value;
+    }
+}
+
+user.name = "Sabrina"
+console.log(user.name); // "Sabrina"
+
+user.name = "";//"입력한 값이 네 글자 이하입니다."
+```
+
+-   실제 프로퍼티 값을 감싸는 `래퍼(wrapper)`처럼 사용
+-   **user의 이름**은 `_name`에 저장
+-   **프로퍼티 접근**은 **get과 set**으로 이뤄짐
+-   `user._name`으로 접근할 수 있으나 `_`가 붙은 건 바깥에서 건들지 않는게 관습
+
+# 호환성을 위한 사용
+
+```js
+//before
+function User(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+//after
+function User(name, birthday) {
+    this.name = name;
+    this.birthday = birthday;
+}
+```
+
+-   첫 번째 함수와 같이 **name**과 **age**를 저장하는 함수가 있다고 가정
+-   age 대신 **birthday(날짜)를** 저장해야하는 경우 두번째 경우와 같이 **변경**해야 함
+    -   **기존 코드** 중 프로퍼티 `age`를 **사용하고 있는 코드**도 **수정**해줘야 함
+
+## 해결법
+
+```js
+function User(name, birthday) {
+    this.name = name;
+    this.birthday = birthday;
+
+    Object.defineProperty(this, 'age', {
+        get() {
+            let todayYear = new Date().getFullYear();
+            return todayYear - this.birthday.getFullYear();
+        },
+    });
+}
+
+let joja = new User('Joja', new Date(1995, 10, 21));
+
+console.log(joja.birthday);
+console.log(joja.age);
+```
+
+-   특정값을 **변경하지 않기 위해** `get` 사용
+-   `Object.defineProperty`를 사용하여 설명자에 `get` **메소드 추가**
+-   `.birthday` `.age` 모두 **사용 가능**하다
+
+# Ref
+
+**https://ko.javascript.info/property-accessors**
