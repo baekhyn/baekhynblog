@@ -1,0 +1,63 @@
+---
+title: 'typescript 클래스 변환'
+subtitle: 'class transformer'
+date: '2022-07-31'
+category: 'Typescript'
+---
+
+# 문제 상황
+
+```ts
+class Product {
+    title: string;
+    price: number;
+
+    constructor(t: string, p: number) {
+        this.title = t;
+        this.price = p;
+    }
+
+    getInformation() {
+        return [this.title, `$${this.price}`];
+    }
+}
+
+const product = [
+    { title: 'A', price: 30.03 },
+    { title: 'B', price: 14.34 },
+];
+// json data
+
+const ins = new Product('C', 12.45);
+
+console.log(ins.getInformation);
+console.log(product.getInformation);
+// 🚫 ERROR
+```
+
+-   `ins`는 **인스턴스화** 되었기 때문에 **클래스의 메소드**를 사용할 수 있다.
+-   다운 받은 `product`의 경우 `Product`의 **인스턴스가 아니기때문에** 클래스의 **메소드를 사용할 수 없다.**
+
+`product`에서 `Product 클래스`의 **메소드**를 사용하고 싶은경우 **해결법**
+
+# 해결 1
+
+인스턴스화 하는 코드 작성
+
+```ts
+const loadedProducts = products.map((prod) => {
+    return new Product(prod.title, prod.price);
+});
+
+for (const prod of loadedProducts) {
+    console.log(prod.getInformation());
+}
+```
+
+# 해결 2
+
+**https://github.com/typestack/class-transformer**
+
+**클래스 변환 패키지**를 다운받아 사용한다.
+
+위 패키지는 자바스크립트와 타입스크립트에서 모두 사용 가능하다.
