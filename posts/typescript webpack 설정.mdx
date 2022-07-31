@@ -1,0 +1,237 @@
+---
+title: 'typescript webpack 사용하기'
+subtitle: 'webpack'
+date: '2022-07-31'
+category: 'Typescript'
+---
+
+# webpack 사용 하기
+
+ES6의 import 구문 사용 시 http 요청이 많아지는 문제가 생길 수 있다.
+웹팩은 해당 문제를 해결할 수 있는 좋은 도구이다.
+
+웹팩은 코드를 묶어서 http 요청을 줄여주고 코드 최적화 및 빌드 설정을 가능하게 해준다.
+
+## 패키지 설치
+
+작동하고 있는 개발 서버가 있다면 `ctrl+c`로 종료한다.
+
+npm **명령어**로 설치
+
+```http
+npm install --save-dev webpack webpack-cli webpack-dev-server typescript ts-loader
+```
+
+-   `--save-dev`: **package.json** 의 **devDependencies** 항목에 패키지 저장
+
+설치된 패키지들
+
+```json
+  "devDependencies": {
+    "lite-server": "^2.5.4",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.3"
+  }
+```
+
+-   `webpack`: 코드를 묶고 변환하기 위한 특정기능을 플러그인 하도록 지원
+-   `webpack-cli`: 프로젝트에서 웹팩 명령어 사용을 가능하게 함
+-   `webpack-dev-server`: 개발 서버 내 빌트
+    변경사항 감지 시 웹페이지를 다시 컴파일링한다.
+-   `ts-loader`: 웹팩과 함께 동작 웹팩에게 코드를 어떻게 변환할 것인지 알려준다
+
+## ⚙️ webpack.config.js
+
+📄 **tsconfig.json**
+
+```json
+// "rootDir": "./src"
+```
+
+-   **웹팩**이 **루트 파일 위치**를 **결정**할 것이기 때문에
+    `rootDir`설정을 **주석처리** 한다.
+
+```js
+import Component from './component.js';
+import Component from './component';
+// ✅
+```
+
+-   **이중 확장자 검색** 방지를 위해 모든 파일의 **import 구문** 확장자명`.js`를 **삭제**
+
+루트 경로에 `📄 webpack.config.js` 파일 생성
+
+### entry output
+
+다음과 같이 **입력 & 출력**을 설정한다.
+
+```js
+const path = require('path');
+
+module.exports = {
+    entry: './src/app.ts',
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        // 절대 경로
+    },
+};
+```
+
+-   `entry`: **프로젝트의 시작** 지점
+-   `output`: **번들링 완료** 시 생성할 **파일의 이름(filename)과** **저장 경로(path)**
+    -   **동적인 파일명** 지정도 가능하다
+    -   `bundle.[contenthash].js` 모든 빌드에 대한 고유 해시를 자동 생성함
+
+> ❗️
+> **output path** 설정 시 주의할 점
+>
+> -   에러 방지를 위해 `tsconfig.json`의 **outDir**의 경로와 맞춰야 한다.
+> -   상대 경로가 아닌 **절대 경로**를 입력해야 한다.
+
+### loaders
+
+웹팩은 **js, json** 형식의 파일들만 이해할 수 있다.
+
+loader는 웹팩이 **js, json 이외의 다른 형식**의 파일들을 이해할 수 있게 도와준다.
+
+```js
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
+  },
+```
+
+-   `test`: **변환 대상** 파일
+-   `use`: 변환에 사용되는 **loader 이름**
+    -   **ts-loader**는 `tsconfig.json`을 통해 파일을 고려함
+-   `exclude`: 웹팩이 **배제**할 파일
+
+### resolve
+
+```js
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
+```
+
+-   `extensions`: 자동으로 **resolve**할 특정 **확장자명**
+
+### devtool
+
+**source mapping 스타일**을 선택한다.
+
+```js
+devtool: 'inline-source-map';
+```
+
+-   `tsconfig`의 sourceMap 설정이 **true**로 되어있어야 한다.
+
+이외의 다양한 소스 매핑 방식들 **https://webpack.js.org/configuration/devtool/#devtool**
+
+# 웹팩 실행
+
+`package.json`에 다음과 같이 작성
+
+```json
+"scripts": {
+    //...
+    "build":"webpack"
+}
+```
+
+outDir에 js 파일이 있다면 깔끔하게 삭제하고 **npm run build** 실행
+
+# webpack-dev-server
+
+```json
+"scripts": {
+    //...
+    "start":"webpack-dev-server"
+}
+```
+
+**npm run start**
+**로컬호스트 8080**으로 서버가 돌아가는 걸 볼 수 있다.
+
+`bundle.js` 삭제 후
+
+```json
+publicPath: 'dist'
+```
+
+`webpack.config.js`에 다음과 같이 설정하면 파일 변환시 자동 반영
+
+# ⚙️ webpack.config.prod.js
+
+프로덕션 시 필요한 웹팩 설정
+
+```js
+const path = require('path');
+
+module.exports = {
+    mode: 'production',
+    //mode:'development'
+    entry: './src/app.ts',
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        // publicPath: 'dist',
+    },
+    // devtool: 'inline-source-map',
+    devtool: 'none',
+    module: {
+        rules: [
+            {
+                test: /\.ts$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+        ],
+    },
+    resolve: {
+        extensions: ['.ts', '.js'],
+    },
+};
+```
+
+-   publicPath는 **webpack-dev-server**를 위해 작성한 것이였으므로 삭제
+-   프로덕션에 필요하지 않은 `sourceMap` 설정을 'none'으로 변경해준다.
+
+**해당 파일 적용하기**
+
+```json
+"scripts":{
+    //...
+    "build":"webpack"
+}
+```
+
+## clean-webpack-plugin
+
+빌드 시 outDir인 dist 폴더 내의 모든 것들을 비워주는 플러그인
+
+```json
+npm install --save-dev clean-webpack-plugin
+```
+
+npm 플러그인 설치
+
+```js
+const CleanPlugin = require('clean-webpack-plugin');
+
+module.exports = {
+    //...
+    plugins: [new CleanPlugin.CleanWebpackPlugin()],
+};
+```
+
+다음과 같이 작성
