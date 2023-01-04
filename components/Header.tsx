@@ -1,18 +1,12 @@
-import { BlogLogo, HeaderBar } from './Header.style'
-import Link from 'next/link'
-import Nav from './Nav'
+import { HeaderContainer, LogoWrapper } from './Header.style';
+import Link from 'next/link';
 
 export default function Header() {
     return (
-        <HeaderBar>
-            <Link href="/" passHref>
-                <BlogLogo>
-                    Hyn's
-                    <br />
-                    Blog
-                </BlogLogo>
+        <HeaderContainer>
+            <Link href="/" passHref legacyBehavior>
+                <LogoWrapper>baekhyn Blog</LogoWrapper>
             </Link>
-            <Nav />
-        </HeaderBar>
-    )
+        </HeaderContainer>
+    );
 }

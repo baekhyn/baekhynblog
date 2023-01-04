@@ -2,7 +2,8 @@
 title: '타입스크립트 js es6 문법'
 subtitle: 'Typescript'
 date: '2022-06-06'
-category: 'Typescript'
+category:
+    - 'Typescript'
 ---
 
 # let vs var
@@ -11,24 +12,24 @@ category: 'Typescript'
 
 ```ts
 //1.
-var result
+var result;
 function add(a: number, b: number) {
     // var result
-    result = a + b
-    return result
+    result = a + b;
+    return result;
 }
 
-console.log(result)
+console.log(result);
 //error
 //정상출력
 
 //2.
 if (age > 20) {
-    var isOld = true
+    var isOld = true;
     //let 사용 시 에러 발생
 }
 
-console.log(isOld)
+console.log(isOld);
 //true
 ```
 
@@ -44,20 +45,20 @@ var
 -   방법 1
 
 ```ts
-const printOutput = (output: string | number) => console.log(output)
+const printOutput = (output: string | number) => console.log(output);
 ```
 
 -   방법 2
 
 ```ts
-const printOutput: (a: number | string) => void = (output) => console.log(output)
+const printOutput: (a: number | string) => void = (output) => console.log(output);
 ```
 
 ```ts
-const button = document.querySelector('button')
+const button = document.querySelector('button');
 
 if (button) {
-    button.addEventListener('click', (event) => console.log(event))
+    button.addEventListener('click', (event) => console.log(event));
 }
 ```
 
@@ -67,18 +68,18 @@ if (button) {
 # 매개변수 기본값 설정
 
 ```ts
-const add = (a: number, b: number = 1) => a + b
+const add = (a: number, b: number = 1) => a + b;
 
-console.log(add(5))
+console.log(add(5));
 //6
 ```
 
 매개변수 기본값을 설정하면 위와 같이 인자를 하나만 받아도 정상출력된다.
 
 ```ts
-const add = (a: number = 1, b: number) => a + b
+const add = (a: number = 1, b: number) => a + b;
 
-console.log(add(5))
+console.log(add(5));
 //error
 ```
 
@@ -90,10 +91,10 @@ console.log(add(5))
 ```ts
 const add = (...number: number[]) => {
     return numbers.reduce((curResult, curValue) => {
-        return curResult + curValue
-    }, 0)
-}
-const addedNumbers = add(5, 10, 2, 3.7)
+        return curResult + curValue;
+    }, 0);
+};
+const addedNumbers = add(5, 10, 2, 3.7);
 ```
 
 위 코드에서 지원할 인수의 수를 알고 있는 경우 튜플 사용도 가능하다.
@@ -101,16 +102,16 @@ const addedNumbers = add(5, 10, 2, 3.7)
 ```ts
 const add = (...number: [number, number, number]) => {
     return numbers.reduce((curResult, curValue) => {
-        return curResult + curValue
-    }, 0)
-}
-const addedNumbers = add(5, 10, 2)
+        return curResult + curValue;
+    }, 0);
+};
+const addedNumbers = add(5, 10, 2);
 ```
 
 # 배열 구조분해 할당
 
 ```ts
-const [hobby1, hobby2, ...remainingHobbies] = hobby
+const [hobby1, hobby2, ...remainingHobbies] = hobby;
 ```
 
 -   hobby1, hobby2외에 입력된 나머지 배열요소들은 remainingHobbies에 배열병합된다.

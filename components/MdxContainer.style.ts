@@ -1,93 +1,101 @@
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
-export const MdxStyle = styled.div`
-    min-height: 1000px;
-    padding: 0.1rem;
-    margin: 1em 2em;
-    line-height: 33px;
-    font-size: 1rem;
+const headings = css`
+    margin: 0;
+    margin-top: 2em;
+`;
 
-    h1,h2,h3,h4 {
-        padding: 20px;
+export const H1 = styled.h1`
+    ${headings}
+    font-weight: 800;
+    font-size: var(--font-size6);
+`;
+
+export const H2 = styled.h2`
+    ${headings}
+    font-weight: 700;
+    font-size: var(--font-size5);
+`;
+
+export const H3 = styled.h3`
+    ${headings}
+    font-weight: 600;
+    font-size: var(--font-size4);
+`;
+
+export const Text = styled.p`
+    padding: 2px 3px;
+    font-size: var(--font-size3);
+    line-height: 140%;
+`;
+
+export const Blockquote = styled.blockquote`
+    margin: 0;
+    padding: 12px 16px 16px 16px;
+    background-color: var(--colors-gray6);
+    border-radius: 3px;
+`;
+
+export const Code = styled.code`
+    background-color: var(--colors-gray5);
+    font-family: inherit;
+    padding: 2.5px 6px;
+    color: var(--colors-pink1);
+    border-radius: 4px;
+    margin: 3px;
+`;
+
+export const Li = styled.li`
+    line-height: 2.1;
+`;
+
+export const Ul = styled.ul`
+    line-height: 2.2;
+    padding-left: 1.2em;
+`;
+
+export const Ol = styled.ol`
+    line-height: 2.2;
+    padding-left: 1.2em;
+`;
+
+export const Strong = styled.strong`
+    font-weight: 600;
+`;
+
+export const Line = styled.hr`
+    border: 0.5px solid var(--colors-gray4);
+`;
+
+export const CodeStyle = styled.pre`
+    font-family: SFMono-Regular, Menlo, Consolas, Courier, monospace;
+
+    ${Code} {
+        background-color: inherit;
+        font-family: inherit;
+        color: #f0f0f0;
     }
+`;
 
-    h1 {
-        margin: 2rem 1rem;
-        font-weight: 800;
-        font-size: 28px;
+export const NavStyle = styled.nav`
+    font-weight: 600;
+    font-size: var(--font-size2);
+    background: var(--colors-gray6);
+    color: var(--colors-blue1);
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 2.5em;
+    overflow-x: auto;
+
+    & a:hover {
+        text-decoration: underline;
     }
+`;
 
-    h2 {
-        margin: 2rem 1rem;
-        font-weight: 700;
-        font-size: 24px;
-    }
-
-    h3 {
-        margin: 2rem 1rem;
-        font-weight: 600;
-        font-size: 20px;
-    }
-
-    h4 {
-        margin: 2rem 1rem;
-        font-size: 16px;
-    }
-
-    p {
-        margin: 2rem;
-        margin-bottom:20px;
-    }
-
-    strong {
-        font-weight: 600;
-    }
-
-    hr {
-        width: 100%;
-        color: 
-        border: solid 0.1px gray;
-    }
-
-    ul,
-    ol {
-        margin: 0.8rem;
-        padding-left: 1.4rem;
-    }
-
-
-    code {
-        font-family: Söhne Mono, menlo, monospace;
-        background: var(--dark-gray);
-        border-radius: 5px;
-        padding: 6px 10px;
-        margin: 3px;
-        font-size: 14px;
-        font-weight: 800;
-        &[class^="language"]{
-            background: var(--code-black);
-            border: none;
-            font-weight: 500;
-        }
-    }
-
-    blockquote {
-        border-left: var(--blue-gray) 5px solid;
-        margin: 0;
-        margin-bottom: 20px;
-        padding: 0.9em 10px;
-        background: var(--sub-gray);
-        & p {
-            display: inline;
-        }
-    }
-
-    img{
-        width:80%;
-        margin: 0 auto;
-    }
-
-    .headings{
-        display:block;
-    }
+export const MdxStyle = styled.article`
+    padding: 0 1rem;
+    max-width: 100%;
+    margin: 0;
+    color: var(--colors-black3);
 `;

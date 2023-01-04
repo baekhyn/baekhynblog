@@ -2,7 +2,9 @@
 title: 'typescript 데코레이터'
 subtitle: 'Typescript Decorators'
 date: '2022-07-10'
-category: 'Typescript'
+category:
+    - 'Typescript'
+    - 'React'
 ---
 
 # 데코레이터 (Decorators)
@@ -68,14 +70,14 @@ function Log(param: string) {
     };
 }
 
-
 class Box {
-    Method(
-    @Log('A') A,
-    @Log('B') B
-    ){}
-    ...
+Method(
+@Log('A') A,
+@Log('B') B
+){}
+...
 }
+
 ```
 
 ```http

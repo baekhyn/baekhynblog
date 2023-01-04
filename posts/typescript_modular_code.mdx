@@ -1,0 +1,55 @@
+---
+title: 'typescript 네임 스페이스'
+subtitle: 'typescript namespace'
+date: '2022-07-28'
+category:
+    - 'Javascript'
+---
+
+# export
+
+```ts
+//interfaces.ts
+namespace App {
+    export interface a {
+        //...
+    }
+    export interface b {
+        //...
+    }
+}
+```
+
+# import
+
+```ts
+//app.ts
+
+/// <reference path="interfaces.ts" />
+
+namespace App {
+    //app.ts code
+}
+```
+
+# jscode
+
+번들링
+
+```ts
+//classe-enum.ts
+namespace App {
+    export enum Ex {}
+    //...
+    export class Project {
+        //...
+    }
+}
+```
+
+```json
+"module":"amd",
+"outFile":"./dist/bundle.js"
+```
+
+`bundle.js`파일로 번들링

@@ -2,7 +2,8 @@
 title: '조건부 내용 출력'
 subtitle: '리엑트 조건부 내용 출력하기, tsx'
 date: '2022-06-08'
-category: 'React'
+category:
+    - 'React'
 ---
 
 # 조건부 출력
@@ -53,8 +54,8 @@ export const Post = ({ title, subtitle, date, category, slug }: PostType) => {
                 </Link>
             </li>
         </PostStyle>
-    )
-}
+    );
+};
 ```
 
 -   **After**
@@ -63,14 +64,14 @@ export const Post = ({ title, subtitle, date, category, slug }: PostType) => {
 
 ```tsx
 export const Home = ({ allData }: { allData: Array<PostType> }) => {
-    console.log(allData)
+    console.log(allData);
     return (
         <Container>
             <Title name={'Latest Posts'} />
             <Post data={allData} />
         </Container>
-    )
-}
+    );
+};
 ```
 
 `Post.tsx`
@@ -78,7 +79,7 @@ export const Home = ({ allData }: { allData: Array<PostType> }) => {
 ```tsx
 export const Post = ({ data }: { data: Array<PostType> }) => {
     if (data.length === 0) {
-        return <NoPost>No Posts Yet.</NoPost>
+        return <NoPost>No Posts Yet.</NoPost>;
     }
     //포스트 데이터가 없을 시 No posts yet
 
@@ -99,8 +100,8 @@ export const Post = ({ data }: { data: Array<PostType> }) => {
                 </li>
             ))}
         </PostStyle>
-    )
-}
+    );
+};
 ```
 
 -   변경사항 1: **매핑**을 `index.tsx`가 아닌 `Post.tsx`에 수납하였음  

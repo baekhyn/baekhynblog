@@ -1,14 +1,9 @@
-import Image from 'next/image'
-import { ImageContainer, ProfileTitle, TextContainer } from './MainProfile.style'
+import { ProfileContainer, TextWrapper } from './MainProfile.style';
 
 export default function MainProfile() {
     return (
-        <div>
-            <ProfileTitle>About Hyn</ProfileTitle>
-            <ImageContainer>
-                <Image src="/images/profile.gif" alt="main img" width={190} height={190} />
-            </ImageContainer>
-            <TextContainer>
+        <ProfileContainer>
+            <TextWrapper>
                 <p>
                     자기소개 이곳에 텍스트를 채웁시다 자기소개 이곳에 텍스트를 채웁시다 자기소개
                     이곳에 텍스트를 채웁시다 자기소개 이곳에 텍스트를 채웁시다 자기소개 이곳에
@@ -16,7 +11,7 @@ export default function MainProfile() {
                     채웁시다 자기소개 이곳에 텍스트를 채웁시다 자기소개 이곳에 텍스트를 채웁시다
                     자기소개 이곳에 텍스트를 채웁시다
                 </p>
-            </TextContainer>
-        </div>
-    )
+            </TextWrapper>
+        </ProfileContainer>
+    );
 }

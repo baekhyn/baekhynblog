@@ -1,7 +1,8 @@
-import Container from '../components/Container'
-import MainProfile from '../components/MainProfile'
-import { NextSeo } from 'next-seo'
-import metadata from '../data/metadata'
+import Container from '../components/Container';
+import MainProfile from '../components/MainProfile';
+import { NextSeo } from 'next-seo';
+import metadata from '../data/metadata';
+import Title from '../components/Title';
 
 export default function About() {
     return (
@@ -12,7 +13,8 @@ export default function About() {
                 canonical={`${metadata.cononical}/about`}
                 openGraph={{ url: `${metadata.openGraph.url}/about` }}
             />
+            <Title name={'About'} />
             <MainProfile />
         </Container>
-    )
+    );
 }

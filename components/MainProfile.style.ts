@@ -1,21 +1,15 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
-export const ProfileTitle = styled.h1`
-    margin-left: 4rem;
-    font-size: 25px;
-`
+export const ProfileContainer = styled.div`
+    display: block;
+    padding: 0 1rem;
+`;
 
-export const ImageContainer = styled.div`
-    display: flex;
-    justify-content: center;
-`
-
-export const TextContainer = styled.div`
-    margin: 1rem 3rem;
+export const TextWrapper = styled.div`
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 10px 11px 14px -3px rgba(51, 51, 51, 0.3);
+
     p {
         line-height: 1.8;
     }
-`
+`;

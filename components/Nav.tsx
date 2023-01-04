@@ -1,26 +1,26 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ActiveNavItem, NavBox } from './Nav.style';
+import { NavWrapper, LinkItem, ActiveLinkItem, NavBlock, NavBox } from './Nav.style';
 import navdata from '../data/navdata';
 
-function Nav() {
+export default function Nav() {
     const navPath = useRouter().pathname;
+    const navString = navPath.split('/');
 
     return (
-        <NavBox>
-            {navdata.map((Item) => (
-                <span key={Item.href}>
-                    <Link href={Item.href}>
-                        {navPath.includes(Item.href) ? (
-                            <ActiveNavItem>{Item.title}</ActiveNavItem>
+        <NavWrapper>
+            <NavBlock />
+            <NavBox>
+                {navdata.map((item) => (
+                    <Link href={item.href} passHref legacyBehavior key={item.href}>
+                        {`/${navString[1]}`.includes(item.title.toLocaleLowerCase()) ? (
+                            <ActiveLinkItem>{item.title}</ActiveLinkItem>
                         ) : (
-                            <a>{Item.title}</a>
+                            <LinkItem>{item.title}</LinkItem>
                         )}
                     </Link>
-                </span>
-            ))}
-        </NavBox>
+                ))}
+            </NavBox>
+        </NavWrapper>
     );
 }
-
-export default Nav;

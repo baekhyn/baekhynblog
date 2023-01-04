@@ -1,24 +1,23 @@
 import styled from '@emotion/styled';
 
-export const CategoryStyle = styled.ul`
+export const CategoryContainer = styled.ul`
     list-style: none;
+    padding: 0 1rem;
+    display: flex;
 `;
 
-export const CategoryText = styled.li`
-    h1 {
-        font-size: 1.3rem;
-        border-radius: 12px;
-        text-align: center;
-        margin: 1rem auto;
-        margin-left: 0.5rem;
-        padding: 0.3rem;
-        width: 90%;
-        background-image: var(--ocean);
-        transition-property: width;
-        transition-duration: 1s, 5s;
-        transition-delay: 0.1s;
-        &:hover {
-            width: 65%;
-        }
+export const CategoryItem = styled.a`
+    font-size: var(--font-size1);
+    margin-right: 0.5rem;
+    padding: 6px 8px;
+    border-radius: 13px;
+    font-weight: 500;
+    background: var(--colors-blue3);
+    color: var(--colors-blue1);
+
+    &:hover {
+        background: var(--colors-blue1);
+        color: #fff;
+        transition-duration: 100ms;
     }
 `;

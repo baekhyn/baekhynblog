@@ -2,7 +2,9 @@
 title: '리엑트 강의 정리 1'
 subtitle: 'React props, jsx'
 date: '2022-05-29'
-category: 'React'
+category:
+    - 'React'
+    - 'Node.js'
 ---
 
 # React에 대하여
@@ -77,10 +79,10 @@ npm install
 
 **태그 사이**의 **컨텐츠**를 **Props로 전달**.
 
-```jsx:Card.js
+```jsx
 const Card = (props) => {
-  const classes = "card " + props.className;
-  return <div className={classes}>{props.children}</div>;
+    const classes = 'card ' + props.className;
+    return <div className={classes}>{props.children}</div>;
 };
 ```
 
@@ -119,23 +121,23 @@ JSX의 특징
 
 -   일반적인 방식의 JSX 작성
 
-```jsx:jsx
-return(
+```jsx
+return (
     <div>
-	<h2>Let's get started!</h2>
-  	<Expenses items={expenses}/>
+        <h2>Let's get started!</h2>
+        <Expenses items={expenses} />
     </div>
-)
+);
 ```
 
 -   React를 임포트 하여 메소드 사용
 
-```jsx:react.createElement
+```jsx
 return React.createElement(
-  	'div',
-  	{},
-	React.createElement('h2',{},"Let's get started!"),
-  	React.createElement(Expenses, {items:expenses}),
+    'div',
+    {},
+    React.createElement('h2', {}, "Let's get started!"),
+    React.createElement(Expenses, { items: expenses })
 );
 ```
 

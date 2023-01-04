@@ -2,7 +2,9 @@
 title: '리엑트 강의 정리 2'
 subtitle: 'React event, jsx'
 date: '2022-06-05'
-category: 'React'
+category:
+    - 'React'
+    - 'Node.js'
 ---
 
 # 이벤트
@@ -11,16 +13,22 @@ category: 'React'
 on으로 시작하는 이름의 props 추가.
 ex) onClick
 
-```js:🎉
+```js
 //1
- <button onClick={()=>{console.log("Clicked!!!")}}>Change title</button>
+<button
+    onClick={() => {
+        console.log('Clicked!!!');
+    }}
+>
+    Change title
+</button>;
 
 //2
-  const clickHandler = () => {
-    console.log("Clicked!!!");
-  };
+const clickHandler = () => {
+    console.log('Clicked!!!');
+};
 
- <button onClick={clickHandler}>Change title</button>
+<button onClick={clickHandler}>Change title</button>;
 ```
 
 1. **화살표 함수로 실행:** jsx에 너무 많은 로직을 넣으면 코드가 깔끔해 보이지 않음
@@ -31,8 +39,8 @@ ex) onClick
 **useState**는 **리엑트 훅**이다.  
 **컴포넌트 안에서** **호출**이 되어야 한다.
 
-```ts:state
-  const [title, setTitle] = useState(props.title);
+```ts
+const [title, setTitle] = useState(props.title);
 ```
 
 1. `useState(props.title)` **props.title** 초기값
@@ -54,10 +62,10 @@ title은 리엑트에서 가져옴
 
 input 요소에서 사용자 입력 읽기
 
-```ts:state
-  const titleChangeHandler = (event) => {
+```ts
+const titleChangeHandler = (event) => {
     console.log(event.target.value);
-  };
+};
 ```
 
 사용자 입력값 나옴 변경될때마다 콘솔에 찍힘.
@@ -70,13 +78,13 @@ input 요소에서 사용자 입력 읽기
 
 스프레드 문법을 사용해 객체를 업데이트
 
-```js:👀
-  const titleChangeHandler = (event) => {
+```js
+const titleChangeHandler = (event) => {
     setUserInput({
-      ...userInput,
-      enteredTitle: event.target.value,
+        ...userInput,
+        enteredTitle: event.target.value,
     });
-  };
+};
 ```
 
 # 전송값 수신
@@ -112,42 +120,42 @@ props는 오직 부모요소에서 자식요소로만 전달할 수 있다 건�
 
 -   1. 자식요소에 Props로 넘길 함수 생성
 
-```js:App.js
-  const addExpenseHandler = (expenses) => {
+```js
+const addExpenseHandler = (expenses) => {
     console.log('In App.js');
     console.log(expenses);
-  };
+};
 ```
 
 -   2. props로 함수 넘겨주기
 
-```js:App.js
- return (
+```js
+return (
     <div>
-      <NewExpense onAddExpense={addExpenseHandler} />
-      // <Expenses items={expenses} />
+        <NewExpense onAddExpense={addExpenseHandler} />
+        // <Expenses items={expenses} />
     </div>
-  );
+);
 ```
 
 -   2. props에 함수 포인터로 지목하기
 
-```js:NewExpense.js
+```js
 const NewExpense = (props) => {
-  const onSaveExpenseDataHandler = (enterExpenseData) => {
-    const expenseData = {
-      ...enterExpenseData,
-      id: Math.random().toString(),
+    const onSaveExpenseDataHandler = (enterExpenseData) => {
+        const expenseData = {
+            ...enterExpenseData,
+            id: Math.random().toString(),
+        };
+        props.onAddExpense(expenseData);
     };
-    props.onAddExpense(expenseData);
-  };
 
-  return (
-    <div className="new-expense">
-      <ExpenseForm onSaveExpenseData={onSaveExpenseDataHandler} />
-      {/* ()함수 실행이 아니라 포!인!터! 전달 */}
-    </div>
-  );
+    return (
+        <div className="new-expense">
+            <ExpenseForm onSaveExpenseData={onSaveExpenseDataHandler} />
+            {/* ()함수 실행이 아니라 포!인!터! 전달 */}
+        </div>
+    );
 };
 
 export default NewExpense;
@@ -181,7 +189,7 @@ props로 받고 함수 안에서 실행시킨다.
                 date={expense.date}
             />
         ))
-    )
+    );
 }
 ```
 
@@ -189,7 +197,7 @@ props로 받고 함수 안에서 실행시킨다.
 
 ```js
 {
-    filterdExpenses.length === 0 && <p>No expenses found</p>
+    filterdExpenses.length === 0 && <p>No expenses found</p>;
 }
 {
     filterdExpenses.length > 0 &&
@@ -200,7 +208,7 @@ props로 받고 함수 안에서 실행시킨다.
                 amount={expense.amount}
                 date={expense.date}
             />
-        ))
+        ));
 }
 ```
 

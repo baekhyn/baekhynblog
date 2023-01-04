@@ -1,12 +1,12 @@
 const metadata = {
-    title: 'Hyn blog',
-    description: 'Hyn의 블로그입니다.',
-    cononical: 'https://hynblog.vercel.app',
+    title: 'baekhyn Blog',
+    description: 'baekhyn의 블로그입니다.',
+    cononical: 'https://baekhyn.com',
     openGraph: {
         type: 'website',
-        url: 'https://hynblog.vercel.app',
-        title: 'Hyn blog',
-        site_name: 'Hyn blog',
+        url: 'https://baekhyn.com',
+        title: 'baekhyn Blog',
+        site_name: 'baekhyn Blog',
         locale: 'ko_KR',
         images: [
             {
@@ -21,6 +21,6 @@ const metadata = {
         card: 'summary',
         cardType: 'summary_large_image',
     },
-}
+};
 
-export default metadata
+export default metadata;

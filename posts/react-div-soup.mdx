@@ -1,0 +1,116 @@
+---
+title: react div soup 🥣 해결하기
+subtitle: '불필요한 react div 태그 사용 대안'
+date: '2022-07-07'
+category:
+    - 'React'
+---
+
+# JSX 규칙
+
+```jsx
+return (
+    <h1>Hello</h1>
+    <h2>React</h2>
+)
+//🚫 ERROR
+```
+
+-   Root 요소에는 하나의 요소만 인접가능하다.
+
+## JSX 생성방식
+
+-   위와 같은 JSX 규칙은 JSX 생성 방식과 관련이 있다
+-   하기의 코드와 같이 JSX가 생성되기 때문에, 한 개 이상의 요소가 루트 요소에 인접하는 방식은 유효한 자바스크립트가 아니다.
+
+```jsx
+return React.createElement(
+    'div',
+    {},
+    React.createElement('h2', {}, "Let's get started!"),
+    React.createElement(Expenses, { items: expenses })
+);
+```
+
+[**✅ React.createElement에 대한 포스팅**](/posts/%EB%A6%AC%EC%97%91%ED%8A%B8%EA%B0%95%EC%9D%98%EC%A0%95%EB%A6%AC-1#reactcreateelement--)
+
+# div Soup 🥣
+
+```jsx
+<div>
+    <div>
+        <div>
+            <div>
+                <h1>div Soup!!!🥣</h1>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+-   때문에 return 시 불필요한 `<div>`를 많이 사용하는데 이는 문제점이 있음
+    -   JSX 요구 사항 준수를 목적으로 사용하였기 때문에 아무런 의미가 없음(구조적 의미 ❌)
+    -   당연하게도 위의 `<div>`또한 DOM으로 렌더링 되기 때문에 너무 많이 사용한다면 애플리케이션이 느려질 것임
+    -   CSS 스타일링이 깨질 수도 있음
+
+## 해결법 1
+
+```jsx
+return [<h1 key="1">Hello</h1>, <h2 key="2">React</h2>];
+```
+
+-   배열을 return하는 해결법
+    -   모든 요소에 key를 붙여줘야한다는 점에서 별로 좋은 방법이 아님
+
+## 해결법 2
+
+```jsx
+const Wrapper = (props) => {
+    return props.childern;
+};
+
+export default Wrapper;
+
+// App.js
+return (
+    <Wrapper>
+        <h1>Hello</h1>
+        <h2>React</h2>
+    </Wrapper>
+);
+```
+
+-   Wrapper 컴포넌트를 생성하여 해결하는 방법
+    -   props.childern 여는 태그와 닫는 태그 사이의 요소를 반환함
+    -   jsx 요구사항을 준수하며 불필요한 html 태그 사용 문제를 해결할 수 있음
+
+## 해결법 3
+
+```jsx
+import {Fragment} from 'react'
+...
+return (
+    <Fragment>
+        <h1>Hello</h1>
+        <h2>React</h2>
+    </Fragment>
+);
+```
+
+-   React 제공 Fragment 사용
+    -   위의 Wrapper와 동일 굳이 컴포넌트를 만들 필요 없이 임포트하여 간단하게 사용 가능
+
+## 해결법 4
+
+```jsx
+return (
+    <>
+        <h1>Hello</h1>
+        <h2>React</h2>
+    </>
+);
+```
+
+-   빈 태그 사용
+    -   빌드 워크플로우가 이를 지원하는 경우 사용 가능
+    -   유효한 HTML이 아니기 때문에 렌더링 되지 않는다

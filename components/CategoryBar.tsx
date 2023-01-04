@@ -1,27 +1,16 @@
-import { CategoryStyle, CategoryText } from './CategoryBar.style'
-import Link from 'next/link'
+import { CategoryContainer, CategoryItem } from './CategoryBar.style';
+import Link from 'next/link';
 
 export default function CategoryBar({ name }: { name: Array<string> }) {
     return (
-        <CategoryStyle>
-            {(
-                <CategoryText>
-                    <Link href={`/category/${name}`}>
-                        <a>
-                            <h1>setArr</h1>
-                        </a>
+        <CategoryContainer>
+            {name.map((name) => (
+                <li key={name}>
+                    <Link href={`/category/${name}/page/1`} passHref legacyBehavior>
+                        <CategoryItem>{name}</CategoryItem>
                     </Link>
-                </CategoryText>
-            ) &&
-                name.map((name) => (
-                    <CategoryText>
-                        <Link href={`/category/${name}`}>
-                            <a>
-                                <h1>{name}</h1>
-                            </a>
-                        </Link>
-                    </CategoryText>
-                ))}
-        </CategoryStyle>
-    )
+                </li>
+            ))}
+        </CategoryContainer>
+    );
 }

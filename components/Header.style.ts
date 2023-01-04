@@ -1,24 +1,29 @@
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
+import styled from '@emotion/styled';
 
-const responsiveNav = css`
-    @media (max-width: 705px) {
-        display: none;
-    }
-`
-
-export const BlogLogo = styled.a`
-    display: inline-block;
-    line-height: 110%;
-    padding: 2rem 1.2rem;
-    font-weight: 900;
-    font-size: 2.2rem;
-    ${responsiveNav}
-`
-
-export const HeaderBar = styled.header`
+export const HeaderContainer = styled.header`
     display: flex;
+    position: sticky;
+    top: 0;
     justify-content: space-between;
     align-items: center;
-    ${responsiveNav}
-`
+    z-index: 3;
+    background-color: var(--colors-indigo1);
+    padding: 15px 30px;
+    box-shadow: -5px -4px 20px rgba(140, 149, 159, 0.2);
+`;
+
+export const LogoWrapper = styled.a`
+    color: var(--colors-white1);
+    padding-left: 40px;
+    font-weight: 600;
+    font-size: var(--font-size4);
+    transition-duration: 200ms;
+
+    &:hover {
+        color: var(--colors-gray3);
+    }
+
+    @media (max-width: 500px) {
+        padding-left: 10px;
+    }
+`;

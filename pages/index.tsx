@@ -1,28 +1,28 @@
-import { GetStaticProps } from 'next'
-import { getAllPostData } from '../util/post'
-import Title from '../components/Title'
-import Container from '../components/Container'
-import { Post } from '../components/Post'
-import { PostType } from '../types/type'
+import { GetStaticProps } from 'next';
+import { getAllPostData } from '../util/post';
+import Container from '../components/Container';
+import Post from '../components/Post';
+import { PostType } from '../types/type';
+import Banner from '../components/Banner';
+import PageLink from '../components/PagiNation';
 
-export const Home = ({ allData }: { allData: Array<PostType> }) => {
-    console.log(allData)
+const POST_LENGTH = 8;
+
+export default function Home({ allData }: { allData: Array<PostType> }) {
     return (
         <Container>
-            <Title name={'Latest Posts'} />
-            <Post data={allData} />
+            <Banner />
+            <Post title={'Latest Posts'} length={POST_LENGTH} data={allData} />
+            <PageLink />
         </Container>
-    )
+    );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const allData = await getAllPostData().slice(0, 4)
-
+    const allData = getAllPostData().slice(0, POST_LENGTH);
     return {
         props: {
             allData,
         },
-    }
-}
-
-export default Home
+    };
+};

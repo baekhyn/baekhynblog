@@ -1,36 +1,64 @@
 :root {
-    --main-white: #fff;
-    --main-black: #11181c;
-    --light-gray: #8f8f8f;
-    --sub-gray: #f8f9fa;
-    --dark-gray: #eeeff2;
-    --rose: #f3e7e9;
-    --yellow-violet: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);
-    --beige-blue: linear-gradient(to right, #fff1eb 0%, #ace0f9 100%);
-    --rose-blue: linear-gradient(to right, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%);
-    --blue-gray: #5e6687;
-    --rose-sub: #f4eeef;
-    --blue: #067acc;
-    --code-light-blue: #9fc4f7;
+    --colors-white1: #fff;
+    --colors-black1: #11181c;
+    --colors-black2: #3d4144;
+    --colors-black3: #37352f;
+    --colors-indigo1: #24292f;
+    --colors-indigo2: #5e6687;
+    --colors-blue1: #0969da;
+    --colors-blue2: #9fc4f7;
+    --colors-blue3: #ddf4ff;
+    --colors-gray1: #57606a;
+    --colors-gray2: #8f8f8f;
+    --colors-gray3: #b1b5bc;
+    --colors-gray4: #d0d7de;
+    --colors-gray5: #eeeff2;
+    --colors-gray6: #f6f8fa;
+    --colors-gray7: rgb(238 238 238 / 62%);
+    --colors-pink1: #e96e65;
     --code-violet: #d392ef;
     --code-black: #282c34;
-    --ocean: linear-gradient(to left, #f5f9fd 30%, #ecf2fb 70%);
+    --font-size1: 0.75rem;
+    /* 12px */
+    --font-size2: 0.875rem;
+    /* 14px */
+    --font-size3: 1rem;
+    /* 16px */
+    --font-size4: 1.25rem;
+    /* 20px */
+    --font-size5: 1.5rem;
+    /* 24px */
+    --font-size6: 1.875rem;
+    /* 30px */
+}
+
+@media (max-width: 480px) {
+    :root {
+        --font-size1: 0.563rem;
+        /* 9.008px */
+        --font-size2: 0.688rem;
+        /* 11.008px */
+        --font-size4: 1.063rem;
+        /* 17.008px*/
+        --font-size5: 1.188rem;
+        /* 19.008px */
+        --font-size6: 1.3rem;
+        /* 20.8px */
+    }
 }
 
 html,
 body {
-    color: var(--main-black);
-    padding: 0;
-    margin: 0;
     font-family: Helvetica Neue, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
         Cantarell, Fira Sans, Droid Sans, sans-serif;
-}
-
-hr {
-    width: 92%;
+    color: var(--colors-black1);
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
 }
 
 a {
+    font-size: inherit;
     color: inherit;
     text-decoration: none;
 }
@@ -39,225 +67,7 @@ a {
     box-sizing: border-box;
 }
 
-nav.toc {
-    margin-left: 14px;
-    background-color: var(--dark-gray);
-    border-radius: 10px;
-    padding: 10px;
-}
-
-nav > ol {
-    list-style: square;
-    font-weight: 700;
-    font-size: 14px;
-    padding: 3px;
-}
-
-a[class*='toc-link'] {
-    color: var(--light-gray);
-}
-
-li > ol {
-    list-style: square inside;
-}
-
-/* code-title */
-.rehype-code-title {
-    background: var(--beige-blue);
-    padding: 0.1rem;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border: solid 1px var(--light-gray);
-    border-bottom: none;
-    text-align: center;
-    font-size: 0.9rem;
-    margin-top: 20px;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-    color: var(--light-gray);
-}
-
-pre[class*='language-'],
-code[class*='language-'] {
-    margin: 0;
-}
-
-pre[class*='language-'] {
-    background: var(--code-black);
-    overflow: auto;
-    position: relative;
-    padding: 20px 25px;
-    line-height: 21px;
-    font-weight: 400;
-    margin-bottom: 30px;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-    color: #fff;
-    border-radius: 10px;
-}
-
-code[class*='language-'] {
-    font-family: Söhne Mono, menlo, monospace;
-    display: block;
-}
-
-span[class*='token'] {
-    font-size: 14px;
-}
-
-span.code-line {
-    display: block;
-    font-size: 14px;
-}
-
-code[class*='language-'] > span {
-    display: block;
-}
-
-:not(pre) > code[class*='language-'] {
-    padding: 0.1em;
-    border-radius: 0.3em;
-}
-
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-    color: #898ea4;
-}
-
-.token.punctuation {
-    color: rgb(235, 188, 107);
-}
-
-.token.class-name {
-    color: rgb(235, 188, 107);
-}
-
-.token.namespace {
-    opacity: 0.7;
-}
-
-.token.operator,
-.token.boolean,
-.token.number {
-    color: #ace0f0;
-}
-
-.token.property {
-    color: #d392ef;
-}
-
-.token.tag {
-    color: #3d8fd1;
-}
-
-.token.string {
-    color: #7fea8a;
-}
-
-.token.selector {
-    color: #6679cc;
-}
-
-.token.attr-name {
-    color: #81cbcd;
-}
-
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string {
-    color: #79da98;
-}
-
-.token.attr-value,
-.token.keyword,
-.token.control,
-.token.directive,
-.token.unit {
-    color: var(--code-violet);
-}
-
-.token.statement,
-.token.regex,
-.token.atrule {
-    color: #22a2c9;
-}
-
-.token.function,
-.token.builtin {
-    color: #83a9e2;
-}
-
-.token.placeholder,
-.token.variable {
-    color: #3d8fd1;
-}
-
-.token.deleted {
-    text-decoration: line-through;
-}
-
-.token.inserted {
-    border-bottom: 1px dotted #202746;
-    text-decoration: none;
-}
-
-.token.italic {
-    font-style: italic;
-}
-
-.token.important,
-.token.bold {
-    font-weight: bold;
-}
-
-.token.important {
-    color: #c94922;
-}
-
-.token.entity {
-    cursor: help;
-}
-
-pre > code.highlight {
-    outline: 0.4em solid #c94922;
-    outline-offset: 0.4em;
-}
-
-/* overrides color-values for the Line Numbers plugin
- * http://prismjs.com/plugins/line-numbers/
- */
-.line-numbers.line-numbers .line-numbers-rows {
-    border-right-color: #dfe2f1;
-}
-
-.line-numbers .line-numbers-rows > span:before {
-    color: #979db4;
-}
-
-/* overrides color-values for the Line Highlight plugin
- * http://prismjs.com/plugins/line-highlight/
- */
-.line-highlight.line-highlight {
-    background: rgba(107, 115, 148, 0.2);
-    background: -webkit-linear-gradient(left, rgba(107, 115, 148, 0.2) 70%, rgba(107, 115, 148, 0));
-    background: linear-gradient(to right, rgba(107, 115, 148, 0.2) 70%, rgba(107, 115, 148, 0));
-}
-
-/*
-Name:       Base16 Atelier Sulphurpool Light
-Author:     Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/sulphurpool)
-Prism template by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/prism/)
-Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
-*/
-
-@media (max-width: 420px) {
-    span.code-line {
-        font-size: 9px;
-    }
-    span[class*='token'] {
-        font-size: 9px;
-    }
+.image {
+    width: 100%;
+    height: auto;
 }
