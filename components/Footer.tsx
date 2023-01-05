@@ -1,10 +1,14 @@
 import { FooterContainer } from './Footer.style';
 
 export default function Footer() {
+    const year = new Date().getFullYear();
+
     return (
         <FooterContainer>
-            <span>© 2022.hyn.All rights reserved.</span>
-            <a href="https://github.com/baekhyn/hynblog">Next.js Blog</a>
+            <small>© {year}.baekhyn.All rights reserved.</small>
+            <p>
+                <a href="https://github.com/baekhyn/hynblog">Next.js Blog</a>
+            </p>
         </FooterContainer>
     );
 }
