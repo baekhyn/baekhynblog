@@ -1,25 +1,10 @@
 import { ImageWrapper, ProfileName, SideContainer, TextWrapper } from './SideProfile.style';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Global, css } from '@emotion/react';
 
 export default function SideProfile() {
     return (
         <SideContainer>
-            <Global
-                styles={css`
-                    .home-image {
-                        width: 100%;
-                        height: auto;
-                        border-radius: 50%;
-                        border: 1.5px solid var(--colors-gray4);
-                        box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
-                    }
-                    .svg-icon {
-                        margin-right: 5px;
-                    }
-                `}
-            />
             <ImageWrapper>
                 <Image
                     src="/images/avatar.jpeg"

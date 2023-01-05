@@ -91,6 +91,11 @@ export const NavStyle = styled.nav`
     & a:hover {
         text-decoration: underline;
     }
+
+    & .image {
+        width: 100%;
+        height: auto;
+    }
 `;
 
 export const MdxStyle = styled.article`

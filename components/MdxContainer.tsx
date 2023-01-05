@@ -1,4 +1,3 @@
-import { Global, css } from '@emotion/react';
 import { getMDXComponent } from 'mdx-bundler/client';
 import Image from 'next/image';
 import React from 'react';
@@ -22,14 +21,6 @@ import {
 const nextImage = ({ alt, src }) => {
     return (
         <>
-            <Global
-                styles={css`
-                    .image {
-                        width: 100%;
-                        height: auto;
-                    }
-                `}
-            />
             <Image alt={alt} src={src} sizes="100vw" className="image" />
         </>
     );

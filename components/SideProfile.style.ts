@@ -6,6 +6,18 @@ export const SideContainer = styled.aside`
     flex: 1 1 250px;
     padding: 13px;
 
+    & .home-image {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+        border: 1.5px solid var(--colors-gray4);
+        box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+    }
+
+    & .svg-icon {
+        margin-right: 5px;
+    }
+
     @media (max-width: 865px) {
         flex: 1 1 180px;
         display: flex;
