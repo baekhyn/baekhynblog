@@ -4,7 +4,6 @@ subtitle: 'React event, jsx'
 date: '2022-06-05'
 category:
     - 'React'
-    - 'Node.js'
 ---
 
 # 이벤트
@@ -13,7 +12,7 @@ category:
 on으로 시작하는 이름의 props 추가.
 ex) onClick
 
-```js
+```jsx
 //1
 <button
     onClick={() => {
@@ -39,7 +38,7 @@ const clickHandler = () => {
 **useState**는 **리엑트 훅**이다.  
 **컴포넌트 안에서** **호출**이 되어야 한다.
 
-```ts
+```jsx
 const [title, setTitle] = useState(props.title);
 ```
 
@@ -62,7 +61,7 @@ title은 리엑트에서 가져옴
 
 input 요소에서 사용자 입력 읽기
 
-```ts
+```jsx
 const titleChangeHandler = (event) => {
     console.log(event.target.value);
 };
@@ -78,7 +77,7 @@ const titleChangeHandler = (event) => {
 
 스프레드 문법을 사용해 객체를 업데이트
 
-```js
+```jsx
 const titleChangeHandler = (event) => {
     setUserInput({
         ...userInput,
@@ -100,7 +99,7 @@ form에서 받는다.
 
 폼 입력시 입력 데이터를 받고 전송 시 폼을 깔끔하게 비워놓음.
 
-```js
+```jsx
 <input
     type="text"
     value={enteredTitle}
@@ -120,7 +119,7 @@ props는 오직 부모요소에서 자식요소로만 전달할 수 있다 건�
 
 -   1. 자식요소에 Props로 넘길 함수 생성
 
-```js
+```jsx
 const addExpenseHandler = (expenses) => {
     console.log('In App.js');
     console.log(expenses);
@@ -129,7 +128,7 @@ const addExpenseHandler = (expenses) => {
 
 -   2. props로 함수 넘겨주기
 
-```js
+```jsx
 return (
     <div>
         <NewExpense onAddExpense={addExpenseHandler} />
@@ -140,7 +139,7 @@ return (
 
 -   2. props에 함수 포인터로 지목하기
 
-```js
+```jsx
 const NewExpense = (props) => {
     const onSaveExpenseDataHandler = (enterExpenseData) => {
         const expenseData = {
@@ -176,7 +175,7 @@ props로 받고 함수 안에서 실행시킨다.
 
 -   방법 1
 
-```js
+```jsx
 {
     filterdExpenses.length === 0 ? (
         <p>No expenses found</p>
@@ -195,7 +194,7 @@ props로 받고 함수 안에서 실행시킨다.
 
 -   방법 2
 
-```js
+```jsx
 {
     filterdExpenses.length === 0 && <p>No expenses found</p>;
 }
@@ -216,7 +215,7 @@ props로 받고 함수 안에서 실행시킨다.
 
 -   방법 3
 
-```js
+```jsx
 let expensesContent = <p>No expenses found.</p>
 // 변수에 Jsx 저장이 가능하다.
 

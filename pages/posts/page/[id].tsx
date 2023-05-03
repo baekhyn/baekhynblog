@@ -4,8 +4,7 @@ import Container from '../../../components/Container';
 import Post from '../../../components/Post';
 import { PostType, PostPageInter } from '../../../types/type';
 import { getAllPostData } from '../../../util/post';
-
-const POST_LENGTH = 6;
+import { POST_LENGTH } from '../../../constant/post.constant';
 
 export default function Posts({
     posts,

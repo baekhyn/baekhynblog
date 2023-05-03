@@ -5,18 +5,17 @@ import navdata from '../data/navdata';
 
 export default function Nav() {
     const navPath = useRouter().pathname;
-    const navString = navPath.split('/');
 
     return (
         <NavWrapper>
             <NavBlock />
             <NavBox>
-                {navdata.map((item) => (
-                    <Link href={item.href} passHref legacyBehavior key={item.href}>
-                        {`/${navString[1]}`.includes(item.title.toLocaleLowerCase()) ? (
-                            <ActiveLinkItem>{item.title}</ActiveLinkItem>
+                {navdata.map(({ href, title }) => (
+                    <Link href={href} passHref legacyBehavior key={href}>
+                        {navPath.includes(title.toLocaleLowerCase()) ? (
+                            <ActiveLinkItem>{title}</ActiveLinkItem>
                         ) : (
-                            <LinkItem>{item.title}</LinkItem>
+                            <LinkItem>{title}</LinkItem>
                         )}
                     </Link>
                 ))}

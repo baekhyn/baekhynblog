@@ -4,6 +4,7 @@ export const CategoryContainer = styled.ul`
     list-style: none;
     padding: 0 1rem;
     display: flex;
+    margin-top: 1.5rem;
 `;
 
 export const CategoryItem = styled.a`

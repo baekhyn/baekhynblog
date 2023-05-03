@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 
 export const ProfileContainer = styled.div`
     display: block;
-    padding: 0 1rem;
 `;
 
 export const TextWrapper = styled.div`

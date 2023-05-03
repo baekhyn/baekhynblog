@@ -1,14 +1,15 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { getAllPostData, getSinglePost } from '../../util/post';
 import Container from '../../components/Container';
-import MdxContainer from '../../components/MdxContainer';
-import MdxTitle from '../../components/MdxTitle';
+import React from 'react';
 import { MDXType } from '../../types/type';
 import { NextSeo } from 'next-seo';
 import metadata from '../../data/metadata';
+import MdxLayout from '../../components/MdxLayout';
+import MdxPost from '../../components/Components';
 
 export default function Post({ postData }: { postData: MDXType }) {
-    const { code, frontmatter } = postData;
+    const { frontmatter } = postData;
 
     return (
         <Container>
@@ -25,13 +26,9 @@ export default function Post({ postData }: { postData: MDXType }) {
                     },
                 }}
             />
-            <MdxTitle
-                title={frontmatter.title}
-                subtitle={frontmatter.subtitle}
-                date={frontmatter.date}
-                category={frontmatter.category}
-            />
-            <MdxContainer code={code} />
+            <MdxLayout postData={postData}>
+                <MdxPost postData={postData} />
+            </MdxLayout>
         </Container>
     );
 }

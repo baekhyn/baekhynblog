@@ -1,31 +1,31 @@
 import styled from '@emotion/styled';
 
 export const Layout = styled.div`
-    padding-right: 14px;
-    padding-left: 14px;
-    margin-right: auto;
-    margin-left: auto;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    max-width: 1300px;
-    min-height: 650px;
-    gap: 11px;
+    flex-direction: column;
+    padding: 0 1.1rem;
 
     main {
-        word-break: break-all;
-        flex: 1 1 850px;
-        gap: 2px;
+        min-height: 600px;
+        min-width: 0;
     }
 
-    @media (max-width: 865px) {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
+    @media (min-width: 700px) {
+        flex-direction: row;
+        justify-content: center;
+        max-width: 1300px;
+        margin-left: auto;
+        margin-right: auto;
+        gap: 10px;
+
+        main {
+            flex: 1 1 850px;
+            max-width: 850px;
+        }
     }
 `;
 
 export const NavContainer = styled.div`
     border-bottom: 1px solid var(--colors-gray4);
-    margin-top: 30px;
+    margin-top: 1.3rem;
 `;

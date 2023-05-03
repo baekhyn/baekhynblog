@@ -16,14 +16,14 @@ export default function Posts({ allData }: { allData: Array<PostType> }) {
                 canonical={`${metadata.cononical}/posts`}
                 openGraph={{ url: `${metadata.openGraph.url}/posts` }}
             />
-            <Title name={'Posts'} />
-            <Post title={'Posts'} length={allData.length} data={allData} />
+            <Title name="Posts" />
+            <Post title="Posts" length={allData.length} data={allData} />
         </Container>
     );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const allData = await getAllPostData();
+    const allData = getAllPostData();
 
     return {
         props: {

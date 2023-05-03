@@ -12,28 +12,23 @@ import rehypeToc from '@jsdevtools/rehype-toc';
 import { PostType } from '../types/type';
 
 const postDirPath = path.join(process.cwd(), 'posts');
-// root dir + 'posts'
 const postFileNames = fs.readdirSync(postDirPath);
-// post의 이름들(파일명)
 
 export function getAllPostData() {
     const allPostData = postFileNames
         .map((fileName) => {
-            const slug = fileName.replace(/\.mdx$/, '');
-            // 확장자명 지우기
             const fileDirPath = path.join(postDirPath, fileName);
-            // 개별 포스트 경로
             const postContents = fs.readFileSync(fileDirPath, 'utf-8');
-            // 그 경로의 파일 인코딩하기
             const matterData = matter(postContents);
-            // 메터 데이터 읽기
-            console.log(matterData.data);
+
+            const slug = fileName.replace(/\.mdx$/, '');
+
             return {
                 slug,
                 ...(matterData.data as PostType),
             };
         })
-        .sort(({ date: a }, { date: b }): number => {
+        .sort(({ date: a }, { date: b }) => {
             if (a < b) {
                 return 1;
             }
@@ -48,6 +43,7 @@ export function getAllPostData() {
 
 export async function getSinglePost(slug: string) {
     const source = fs.readFileSync(path.join(postDirPath, `${slug}.mdx`), 'utf8');
+
     const { code, frontmatter } = await bundleMDX({
         source,
         mdxOptions(options) {

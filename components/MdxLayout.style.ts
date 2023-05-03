@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
 
 export const TitleBox = styled.div`
-    padding: 1rem;
-    max-width: 100%;
+    padding: 2rem 1rem;
     margin: 0;
-    margin-bottom: 12px;
     color: var(--colors-black3);
 
     h1 {
@@ -59,4 +57,10 @@ export const PostTag = styled.a`
         color: #fff;
         transition-duration: 100ms;
     }
+`;
+
+export const MdxContainer = styled.article`
+    max-width: 100%;
+    margin: 0;
+    font-size: var(--font-size3);
 `;

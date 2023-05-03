@@ -24,7 +24,7 @@ export const PageNavContainer = styled.div`
     padding: 0 1rem;
     margin: 2rem 0;
     justify-content: center;
-    font-size: var(--font-size2);
+    font-size: var(--font-size3);
 `;
 
 export const SingleButton = styled.a`
@@ -35,7 +35,7 @@ export const SingleButton = styled.a`
     border: 1px solid var(--colors-gray4);
     border-radius: 8px;
     height: 38px;
-    font-size: var(--font-size2);
+    font-size: var(--font-size3);
     font-weight: 600;
     padding: 3px;
     width: 100%;

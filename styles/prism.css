@@ -20,21 +20,21 @@ pre[class*='language-'] {
     margin-bottom: 30px;
     color: #fff;
     border-radius: 10px;
-    max-width: 874px;
+    max-width: 100%;
 }
 
 code[class*='language-'] {
-    font-family: SFMono-Regular, Menlo, Consolas, Courier, monospace;
     display: block;
+    font-family: SFMono-Regular, Menlo, Consolas, Courier, monospace;
 }
 
 span[class*='token'] {
-    font-size: 14px;
+    font-size: var(--font-size2);
 }
 
 span.code-line {
     display: block;
-    font-size: 14px;
+    font-size: var(--font-size2);
 }
 
 :not(pre) > code[class*='language-'],

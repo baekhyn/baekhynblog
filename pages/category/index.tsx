@@ -22,7 +22,7 @@ export default function Category({ categoryData }: { categoryData: Array<string>
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const allData = await getAllPostData();
+    const allData = getAllPostData();
     const categoryData = getCategoryData(allData);
 
     return {

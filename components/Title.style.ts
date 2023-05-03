@@ -1,11 +1,9 @@
 import styled from '@emotion/styled';
 
 export const TitleContainer = styled.div`
-    padding: 0 0.8rem;
-
     h1 {
         font-size: var(--font-size3);
-        padding: 2rem;
+        padding: 2rem 1rem;
         margin: 0;
         border-bottom: solid 1px var(--colors-gray4);
     }

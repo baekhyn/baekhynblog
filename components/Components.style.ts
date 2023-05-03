@@ -27,7 +27,7 @@ export const H3 = styled.h3`
 export const Text = styled.p`
     padding: 2px 3px;
     font-size: var(--font-size3);
-    line-height: 140%;
+    line-height: 150%;
 `;
 
 export const Blockquote = styled.blockquote`
@@ -47,7 +47,7 @@ export const Code = styled.code`
 `;
 
 export const Li = styled.li`
-    line-height: 2.1;
+    line-height: 2.2;
 `;
 
 export const Ul = styled.ul`
@@ -70,6 +70,7 @@ export const Line = styled.hr`
 
 export const CodeStyle = styled.pre`
     font-family: SFMono-Regular, Menlo, Consolas, Courier, monospace;
+    overflow-x: auto;
 
     ${Code} {
         background-color: inherit;
@@ -99,8 +100,10 @@ export const NavStyle = styled.nav`
 `;
 
 export const MdxStyle = styled.article`
-    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
     max-width: 100%;
     margin: 0;
     color: var(--colors-black3);
+    font-size: var(--font-size3);
 `;

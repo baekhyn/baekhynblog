@@ -2,41 +2,46 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 const navStyle = css`
-    color: var(--colors-gray1);
+    color: var(--colors-black2);
     font-size: var(--font-size3);
     font-weight: 500;
-    padding: 16px 9px;
-    border-bottom: 2px solid transparent;
-    margin: 0 14px;
+    border-bottom: 3px solid transparent;
+    padding: 1rem 0;
 
-    @media (max-width: 490px) {
-        padding: 16px 1px;
-        margin: 0;
+    @media (min-width: 700px) {
+        margin: 0 14px;
+        padding: 16px 9px;
     }
 `;
 
 export const NavWrapper = styled.div`
-    display: flex;
-    max-width: 1300px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 0 1rem;
+
+    @media (min-width: 700px) {
+        display: flex;
+        max-width: 1300px;
+        margin: 0 auto;
+    }
 `;
 
 export const NavBox = styled.nav`
     display: flex;
-    align-items: center;
-    flex: 1 2.2 850px;
+    justify-content: space-around;
 
-    @media (max-width: 865px) {
-        justify-content: space-around;
+    @media (min-width: 700px) {
+        flex: 1 2.2 850px;
+        max-width: 850px;
+        justify-content: flex-start;
     }
 `;
 
 export const NavBlock = styled.div`
-    flex: 1 1 250px;
+    display: none;
 
-    @media (max-width: 865px) {
-        display: none;
+    @media (min-width: 700px) {
+        display: flex;
+        flex: 1 1 250px;
+        padding: 0 0.8rem;
     }
 `;
 

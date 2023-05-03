@@ -6,8 +6,7 @@ import { PostType, PostPageInter } from '../../../../types/type';
 import { NextSeo } from 'next-seo';
 import metadata from '../../../../data/metadata';
 import PageLink from '../../../../components/PagiNation';
-
-const POST_LENGTH = 6;
+import { POST_LENGTH } from '../../../../constant/post.constant';
 
 export default function Category({
     posts,

@@ -1,13 +1,4 @@
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
-
-const align = css`
-    text-align: right;
-
-    @media (max-width: 490px) {
-        text-align: left;
-    }
-`;
 
 export const LinkWrapper = styled.a`
     display: block;
@@ -19,7 +10,7 @@ export const HeadingWrapper = styled.h1`
     text-align: left;
     font-size: var(--font-size3);
     border-bottom: solid 1px var(--colors-gray4);
-    padding: 2rem;
+    padding: 2rem 1rem;
     pointer-events: none;
 
     span {
@@ -31,13 +22,11 @@ export const HeadingWrapper = styled.h1`
 export const PostContainer = styled.article`
     list-style: none;
     color: var(--colors-black2);
-    padding: 0 0.8rem;
     max-width: 100%;
-    ${align}
     margin: 0;
 
     article {
-        padding: 24px 24px;
+        padding: 1.3rem 1rem;
         border-bottom: 1px solid var(--colors-gray4);
     }
 
